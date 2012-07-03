@@ -1,0 +1,1 @@
+dev_mount sdcard /mnt/extra-sd auto /devices/platform/sdhci-tegra.2/mmc_host/mmc2

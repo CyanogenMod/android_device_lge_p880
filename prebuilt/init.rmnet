@@ -1,0 +1,24 @@
+#!/system/bin/sh
+
+cid=$1
+ifaceid=$(($cid-1))
+RMNET_IP=`/system/bin/getprop net.pdp$cid.ip`
+IFNAME=`/system/bin/getprop net.pdp$cid.name`
+
+/system/bin/log -t rmnet "configuring $IFNAME: ip address $RMNET_IP";
+
+
+
+/system/bin/ifconfig $IFNAME $RMNET_IP netmask 255.255.255.255 up -arp || {
+#/system/bin/ifconfig $IFNAME $RMNET_IP || {
+    /system/bin/log -t rmnet "ifconfig for $IFNAME failed";
+    /system/bin/setprop "net.pdp$cid.svc_done" "0";
+    exit 1;
+}
+
+/system/bin/ip link set dev $IFNAME arp off
+/system/bin/log -t rmnet "ifconfig for $IFNAME finished successfully";
+/system/bin/setprop "net.$IFNAME.local-ip" $RMNET_IP
+/system/bin/setprop "net.$IFNAME.remote-ip" $RMNET_IP
+/system/bin/setprop net.interfaces.defaultroute gprs
+/system/bin/setprop "net.pdp$cid.svc_done" "1"

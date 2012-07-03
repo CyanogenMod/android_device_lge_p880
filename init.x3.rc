@@ -1,0 +1,348 @@
+import init.x3.usb.rc
+
+on early-init
+    mount debugfs debugfs /sys/kernel/debug
+    write /sys/class/firmware/timeout 5
+
+    # for backwards compatibility
+    export EXTERNAL_STORAGE /mnt/sdcard
+    mkdir /mnt/sdcard 0775 system system
+    mkdir /mnt/extra-sd 0000 system system
+    symlink /mnt/sdcard /sdcard
+
+on init
+
+on fs
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/APP /system wait ro barrier=1
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/UDA /data wait noatime nosuid nodev barrier=1,nomblk_io_submit,data=ordered,nodelalloc,errors=continue
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/CAC /cache wait noatime nosuid nodev barrier=1,nomblk_io_submit
+
+    mkdir /cal
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/CAL /cal wait nosuid nodev barrier=1
+    chown root system /cal
+    chmod 0770 /cal
+
+    mkdir /persist-lg
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/DRM /persist-lg wait nosuid nodev barrier=1
+    chown system system /persist-lg
+    chmod 0771 /persist-lg
+
+    mkdir /mpt
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/MLT /mpt wait nosuid nodev barrier=1 data=ordered
+    chown system system /mpt
+    chmod 0775 /mpt
+
+
+    chown system sdcard_rw /dev/block/platform/sdhci-tegra.3/by-name/MSC
+    chmod 0660 /dev/block/platform/sdhci-tegra.3/by-name/MSC ## misc partition
+
+    mkdir /data/dontpanic
+    chown root system /data/dontpanic
+    chmod 0750 /data/dontpanic
+
+    chmod 777 /dev/mtc_eta_log
+
+    # Collect ramconsole data for last kmsg
+    copy /proc/last_kmsg /data/dontpanic/last_kmsg
+    chown root log /data/dontpanic/last_kmsg
+    chmod 0640 /data/dontpanic/last_kmsg
+
+    # Create this file in case it doesn't exist, needed to switch wifi modes:
+    write /data/misc/wifi/firmware_path ""
+    chmod 0666 /data/misc/wifi/firmware_path
+
+on boot
+        insmod /system/lib/modules/bthid.ko
+    mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
+# --- BRCM
+    mkdir /data/misc/wifi 0775 wifi radio
+    mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    mkdir /data/misc/dhcp 0770 dhcp dhcp
+    chown dhcp dhcp /data/misc/dhcp
+    mkdir /data/nvcam 0777 system system
+    # we will remap this as /mnt/sdcard with the sdcard fuse tool
+    mkdir /data/media 0775 media_rw media_rw
+    chown media_rw media_rw /data/media
+
+    insmod /system/lib/modules/tlx251_le.ko "major=245"
+
+    chmod 0777 /dev/block/platform/sdhci-tegra.3/by-name/NVA
+    chown system sdcard_rw /dev/block/platform/sdhci-tegra.3/by-name/NVA
+    chmod 0660 /dev/block/platform/sdhci-tegra.3/by-name/NVA ## NV partition
+
+    chown system system /sys/devices/virtual/input/lge_touch/keyguard
+
+    # Power control interface
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+    chmod 0660 /sys/class/rfkill/rfkill0/type
+    chmod 0660 /sys/class/rfkill/rfkill1/state
+    chmod 0660 /sys/class/rfkill/rfkill1/type
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/type
+    write /sys/class/rfkill/rfkill0/state 0
+
+    # FactoryTest AT command
+    chmod 0664 /sys/devices/platform/bd_address/bdaddr_if
+    chown radio bluetooth /sys/devices/platform/bd_address/bdaddr_if
+
+    chmod 0666 /dev/pn544
+# backlight
+    chown system radio /sys/class/leds/lcd-backlight/brightness
+    chmod 0664 /sys/class/leds/lcd-backlight/brightness
+
+# key led
+    chown system radio /sys/class/leds/button-backlight/brightness
+    chmod 0664 /sys/class/leds/button-backlight/brightness
+    chown system radio /sys/class/leds/button-backlight/br_maintain_on
+    chmod 0664 /sys/class/leds/button-backlight/br_maintain_on
+    chown system radio /sys/devices/platform/gpio-keys.0/key_test_mode
+# RGB bridge IC(SSD2825)
+    chown system radio /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
+    chown system radio /sys/devices/platform/spi_tegra.4/spi4.2/gamma_saved
+    chown system system /sys/devices/platform/spi_tegra.4/spi4.2/device_id
+    chown system system /sys/devices/platform/spi_tegra.4/spi4.2/mipi_lp
+    chown system system /sys/devices/platform/spi_tegra.4/spi4.2/mipi_hs
+    chown system system /sys/devices/platform/spi_tegra.4/spi4.2/reg_dump
+    chmod 0660 /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
+    chmod 0660 /sys/devices/platform/spi_tegra.4/spi4.2/gamma_saved
+    chmod 0660 /sys/devices/platform/spi_tegra.4/spi4.2/device_id
+    chmod 0660 /sys/devices/platform/spi_tegra.4/spi4.2/mipi_lp
+    chmod 0660 /sys/devices/platform/spi_tegra.4/spi4.2/mipi_hs
+    chmod 0660 /sys/devices/platform/spi_tegra.4/spi4.2/reg_dump
+# fuelgauge
+    #chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-0036/state
+    chown system radio /sys/class/power_supply/fuelgauge/device/state
+    chown system radio /sys/class/power_supply/charger/device/chgcc_ta
+# didim
+    chown system system /sys/devices/nvhost/tegradc.0/smartdimmer/enable
+    chown system system /sys/devices/nvhost/tegradc.0/smartdimmer/aggressiveness
+    chown system system /sys/devices/nvhost/tegradc.0/smartdimmer/phase_in_video
+
+# power
+    chown system system /sys/kernel/tegra_cap/core_cap_level
+    chown system system /sys/kernel/tegra_cap/core_cap_state
+    chown system system /sys/module/cpu_tegra/parameters/cpu_user_cap
+        chown system system /sys/module/cpu_tegra/parameters/force_disable_edp
+
+# BB UART settings
+    chown radio system /dev/ttyHS0
+
+# sangwon.jeon for gyro and accel.
+     chmod 0666 dev/mpu
+     chmod 0666 dev/mpuirq
+     chmod 0666 dev/slaveirq
+     chmod 0666 dev/timerirq
+
+#PROXIMITY SENSOR
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/enable_ps_sensor
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/enable_ps_sensor
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/enable_als_sensor
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/enable_als_sensor
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/proxidata
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/proxidata
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/luxdata
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/luxdata
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/ps_hysteresis
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/ps_hysteresis
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/ps_threshold
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/ps_threshold
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/run_calibration
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/run_calibration
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/ppcount
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/ppcount
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/default_calibration
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/default_calibration
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/ps_data
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/ps_data
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/is_white
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/is_white
+        chown system system /sys/bus/i2c/drivers/apds990x/0-0039/ps_cal_result
+        chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/ps_cal_result
+
+# Power management settings
+    write /sys/module/cpu_tegra3/parameters/no_lp 0
+    #write /sys/module/tegra3_emc/parameters/emc_enable 0
+    #write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 1000000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/cores_states
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/cores_states
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    write /sys/module/cpu_tegra/parameters/force_policy_max Y
+    write /sys/devices/system/cpu/cpufreq/interactive/boost_factor 2
+    write /sys/devices/system/cpu/cpufreq/interactive/sustain_load 80
+    write /sys/module/cpu_tegra3/parameters/auto_hotplug 1
+    write /sys/module/cpuidle/parameters/lp2_in_idle 1
+
+# Interactive dynamic frequecy mode settings
+    write /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load 95
+    write /sys/devices/system/cpu/cpufreq/interactive/dynamic_freq_mode 1
+    write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 20000
+
+# Power Save for camera preview and recording
+    chown media camera /sys/devices/platform/tegra_camera/power_save_preview
+    chown media camera /sys/devices/platform/tegra_camera/power_save_rec
+
+# Power management for jpeg decode
+    chown media sdcard_rw /sys/devices/nvavp/jpeg_decode
+
+    chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/enablesmpl
+    chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/smplcount
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
+
+#LGE_RIL_START sabina.park@lge.com
+service rawip_rmnet1 /system/bin/init.rmnet 1
+   user root
+   group radio cache inet misc
+   disabled
+   oneshot
+
+service rawip_rmnet2 /system/bin/init.rmnet 2
+   user root
+   group radio cache inet misc
+   disabled
+   oneshot
+
+# used to down HSI interfaces on RIL Recovery
+service rmnet1_down /system/bin/init.rmnet-down 1
+   user root
+   group radio cache inet misc
+   disabled
+   oneshot
+
+service rmnet2_down /system/bin/init.rmnet-down 2
+   user root
+   group radio cache inet misc
+   disabled
+   oneshot
+
+service wpa_supplicant /system/bin/wpa_supplicant \
+    -Dnl80211 -iwlan0 -puse_p2p_group_interface=1 -e/data/misc/wifi/entropy.bin
+    group system wifi inet      # 20110602 mingi.sung@lge.com [Wi-Fi] Ported from STAR Gingerbread source
+    socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
+
+service dhcpcd_wlan0 /system/bin/dhcpcd -ABKG   # 20110715 mingi.sung@lge.com [Wi-Fi] command changed on Android 2.3.4 version
+    disabled
+    oneshot
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+        disabled
+        oneshot
+
+service iprenew_wlan0 /system/bin/dhcpcd -n
+        disabled
+        oneshot
+
+service iprenew_p2p /system/bin/dhcpcd -n
+        disabled
+        oneshot
+
+service sdcard /system/bin/sdcard /data/media 1023 1023
+    class late_start
+
+on boot
+  write /sys/class/gpio/export 61
+
+    chown system system /sys/devices/platform/gps_gpio/poweron
+    chown system system /sys/devices/platform/gps_gpio/reset
+    chown system system /sys/devices/platform/gps_gpio/eclk
+    chown system system /dev/ttyHS1
+    chown system system /dev/pts17
+    mkdir /data/gps
+    chmod 770 /data/gps
+    chown system system /data/gps
+    chmod 770 /system/etc/cert/lge.cer
+    chown system system /system/etc/cert/lge.cer
+        chmod 770 /system/etc/hmconfig.txt
+        chown system system /system/etc/hmconfig.txt
+    chown audio audio /dev/pts29
+
+    mkdir /cal/secclk 0770 system system
+    chmod 0770 /cal/secclk
+    chown system system /cal/secclk
+
+    chown root radio /sys/devices/platform/baseband_xmm_power/xmm_onoff
+
+    setprop nvcpud.enabled true
+    setprop nvcpud.config_refresh_ms -1
+
+    # Torch perms
+    chown system camera /sys/devices/platform/tegra-i2c.2/i2c-2/2-0053/torch
+    chmod 0660 /sys/devices/platform/tegra-i2c.2/i2c-2/2-0053/torch
+
+service nvcpud /system/bin/nvcpud
+    class main
+    user root
+    group root
+
+service charger /charger
+        class charger
+        user root
+        group root
+        oneshot
+
+service hdmid /system/bin/hdmid
+    class core
+    socket hdmid stream 0660 root system graphics
+    user system
+        group system
+
+on boot
+    chown system system /sys/power/lge_logstart
+    chmod 0660 /sys/power/lge_logstart
+
+service rdlsc /system/xbin/rdlsc
+   user root
+   group root
+   oneshot
+on boot
+   start rdlsc
+
+
+service lgsecclk /system/bin/lgsecclkserver
+    class main
+    user system
+    group system sdcard_rw media_rw
+
+# restart when servicemanager is restarted
+on property:init.svc.servicemanager=restarting
+     restart lgsecclk
+
+########################################
+# CAPP_DRM
+########################################
+service lgdrm /system/bin/lgdrmserver
+    class main
+    user system
+    group sdcard_rw media_rw system radio media
+
+service tf_daemon /system/bin/tf_daemon -storageDir /cal/widevine -d
+    class main
+    user system
+    group shell system
+    oneshot
+
+# restart when servicemanager is restarted
+on property:init.svc.servicemanager=restarting
+     restart lgdrm
+
+on post-fs-data
+    # create directory for lgdrm
+    mkdir /data/lgdrm 0770 system media
+    setprop vold.post_fs_data_done 1
+
+service hciattach /system/bin/brcm_patchram_plus --enable_hci --no2bytes \
+     --baudrate 3000000 --patchram /etc/firmware/BCM4330B1_002.001.003.0550.0633.hcd \
+     --enable_lpm --scopcm=0,0,0,0,0,0,0,0,0,0 -d /dev/ttyHS2
+    ## The debug is necessary to make it slower :(
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    oneshot

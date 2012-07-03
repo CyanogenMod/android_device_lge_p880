@@ -27,8 +27,40 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 13164074762
 BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_HAS_LARGE_FILESYSTEM := true
 
+TARGET_RECOVERY_PRE_COMMAND := "/system/bin/setup-recovery"
+
+# Try to build the kernel
+TARGET_KERNEL_CONFIG := cyanogenmod_x3_defconfig
+# Keep this as a fallback
 TARGET_PREBUILT_KERNEL := device/lge/p880/kernel
 
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_TOUCH_RECOVERY := true
 TARGET_USERIMAGES_USE_EXT4 := true
+
+TARGET_SPECIFIC_HEADER_PATH := device/lge/p880/include
+
+BOARD_NO_ALLOW_DEQUEUE_CURRENT_BUFFER := true
+BOARD_USE_SKIA_LCDTEXT := true
+BOARD_EGL_CFG := device/lge/p880/egl.cfg
+USE_OPENGL_RENDERER := true
+
+# Wifi related defines
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_WLAN_DEVICE := bcmdhd
+WIFI_DRIVER_FW_PATH_PARAM := "/data/misc/wifi/firmware_path"
+WIFI_DRIVER_FW_PATH_STA := "/system/etc/firmware/fw_bcmdhd.bin"
+WIFI_DRIVER_FW_PATH_P2P := "/system/etc/firmware/fw_bcmdhd_p2p.bin"
+WIFI_DRIVER_FW_PATH_AP := "/system/etc/firmware/fw_bcmdhd_apsta.bin"
+
+BOARD_HAS_VIBRATOR_IMPLEMENTATION := ../../device/lge/p880/vibrator.c
+
+TARGET_BOOTANIMATION_PRELOAD := true
+TARGET_BOOTANIMATION_TEXTURE_CACHE := true
+
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_BCM := true
