@@ -9,8 +9,6 @@ struct {
     { "ril-daemon",AID_RADIO, AID_RADIO },
     { "rawip_rmnet1",AID_RADIO, AID_RADIO },
     { "rawip_rmnet2",AID_RADIO, AID_RADIO },
-    { "rawip_rmnet3",AID_RADIO, AID_RADIO },
-    { "rawip_rmnet4",AID_RADIO, AID_RADIO },
     { "rmnet1_down", AID_RADIO, AID_RADIO },
     { "rmnet2_down", AID_RADIO, AID_RADIO },
      {NULL, 0, 0 }
@@ -53,6 +51,8 @@ struct {
     { "persist.service.", AID_RADIO,    0 },
     { "persist.security.",AID_SYSTEM,   0 },
     { "net.pdp",          AID_RADIO,    AID_RADIO },
+    { "net.pdp1",         AID_RADIO,    AID_RADIO },
+    { "net.pdp2",         AID_RADIO,    AID_RADIO },
     { "media.tegra",      AID_MEDIA,    0 },
     { NULL, 0, 0 }
 };

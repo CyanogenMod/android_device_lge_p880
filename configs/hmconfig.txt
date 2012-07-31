@@ -1,0 +1,21 @@
+# set to 1 to ignore NVM content and always use the default values
+USE_NVM               = 1
+# was 0 o stock
+
+# default values:
+DEFAULT_GPS_USAGE     = 1
+DEFAULT_GLONASS_USAGE = 1
+DEFAULT_SBAS_USAGE    = 1
+DEFAULT_QZSS_USAGE    = 1
+DEFAULT_WIFI_USAGE    = 0
+DEFAULT_MEMS_USAGE    = 1
+
+# default position (to initialize PDR if real location is not available at this time)
+DEFAULT_LAT = 37.374552
+DEFAULT_LONG = -121.914479
+DEFAULT_ALT = 0
+
+# Sensors orientation inside the device
+# For meaning look at memsData.c
+SENS_MATRIX = 2,1,-3,-1,2,-3,1,2,3,1,-2,-3,1,2,3
+
