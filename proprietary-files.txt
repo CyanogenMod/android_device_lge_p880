@@ -3,7 +3,6 @@ bin/lgdrmserver
 bin/lgsecclkserver
 bin/nvcpud
 bin/tf_daemon
-bin/hostapd
 lib/hw/camera.tegra.so
 lib/hw/gps.tegra.so
 lib/hw/lights.x3.so

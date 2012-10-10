@@ -57,6 +57,7 @@ WIFI_DRIVER_FW_PATH_PARAM := "/data/misc/wifi/firmware_path"
 WIFI_DRIVER_FW_PATH_STA := "/system/etc/firmware/fw_bcmdhd_p2p.bin"
 WIFI_DRIVER_FW_PATH_P2P := "/system/etc/firmware/fw_bcmdhd_p2p.bin"
 WIFI_DRIVER_FW_PATH_AP := "/system/etc/firmware/fw_bcmdhd_apsta.bin"
+BOARD_LEGACY_NL80211_STA_EVENTS := true
 
 BOARD_HAS_VIBRATOR_IMPLEMENTATION := ../../device/lge/p880/vibrator.c
 
