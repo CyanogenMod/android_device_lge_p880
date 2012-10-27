@@ -7,5 +7,5 @@
 /misc           emmc            /dev/block/platform/sdhci-tegra.3/by-name/MSC
 /staging        emmc            /dev/block/platform/sdhci-tegra.3/by-name/USP
 /data           ext4            /dev/block/platform/sdhci-tegra.3/by-name/UDA
-/sdcard		vfat            /dev/block/platform/sdhci-tegra.2/by-num/p1
-/emmc		datamedia	/dev/null
+/external_sd	vfat            /dev/block/platform/sdhci-tegra.2/by-num/p1
+/sdcard		datamedia	/dev/null
