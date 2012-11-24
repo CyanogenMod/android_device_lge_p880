@@ -27,6 +27,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.x3.rc:root/init.x3.rc \
     $(LOCAL_PATH)/ueventd.x3.rc:root/ueventd.x3.rc \
+    $(LOCAL_PATH)/fstab.x3:root/fstab.x3 \
     $(LOCAL_PATH)/init.x3.usb.rc:root/init.x3.usb.rc
 
 PRODUCT_COPY_FILES += \
@@ -110,8 +111,6 @@ PRODUCT_PACKAGES += \
     Nfc \
     Tag
 
-# Radio fixup
-FRAMEWORKS_BASE_SUBDIRS += ../../$(LOCAL_PATH)/ril/
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/init.rmnet:system/bin/init.rmnet \
     $(LOCAL_PATH)/prebuilt/init.rmnet-down:system/bin/init.rmnet-down

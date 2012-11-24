@@ -177,18 +177,4 @@
         <item>255</item>
     </integer-array>
 
-    <bool name="config_bluetooth_adapter_quick_switch">false</bool>
-
-    <!-- Home+Back+Menu -->
-<!--
-    <integer name="config_deviceHardwareKeys">7</integer>-->
-
-    <bool name="config_autoBrightnessButtonKeyboard">false</bool>
-
-    <!-- Package name providing network location support. -->
-    <string name="config_networkLocationProviderPackageName" translatable="false">com.google.android.location</string>
-
-    <!-- Package name providing geocoder API support. -->
-    <string name="config_geocodeProviderPackageName" translatable="false">com.google.android.location</string>
-
 </resources>

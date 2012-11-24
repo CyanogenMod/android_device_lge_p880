@@ -4,38 +4,29 @@ on early-init
     mount debugfs debugfs /sys/kernel/debug
     write /sys/class/firmware/timeout 5
 
-    # for backwards compatibility
-    export EXTERNAL_STORAGE /storage/sdcard0
-    mkdir /storage/ 0111 system system
-    mkdir /storage/sdcard0 0775 system system
-    mkdir /storage/sdcard1 0000 system system
-    symlink /storage/sdcard0 /sdcard
+    mkdir /cal 0770 root system
+    mkdir /persist-lg 0771 system system
+    mkdir /mpt 0775 system system
 
 on init
+    # See storage config details at http://source.android.com/tech/storage/
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage/emulated 0555 root root
+
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+
+    # Support legacy paths
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
+
+    mkdir /storage/sdcard1 0000 system system
 
 on fs
-    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/APP /system wait ro barrier=1
-    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/UDA /data wait noatime nosuid nodev barrier=1,nomblk_io_submit,data=ordered,nodelalloc,errors=continue
-    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/CAC /cache wait noatime nosuid nodev barrier=1,nomblk_io_submit
-
-    mkdir /cal
-    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/CAL /cal wait nosuid nodev barrier=1
-    chown root system /cal
-    chmod 0770 /cal
-
-    mkdir /persist-lg
-    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/DRM /persist-lg wait nosuid nodev barrier=1
-    chown system system /persist-lg
-    chmod 0771 /persist-lg
-
-    mkdir /mpt
-    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/MLT /mpt wait nosuid nodev barrier=1 data=ordered
-    chown system system /mpt
-    chmod 0775 /mpt
-
-
-    chown system sdcard_rw /dev/block/platform/sdhci-tegra.3/by-name/MSC
-    chmod 0660 /dev/block/platform/sdhci-tegra.3/by-name/MSC ## misc partition
+    mount_all ./fstab.x3
 
     mkdir /data/dontpanic
     chown root system /data/dontpanic
@@ -262,7 +253,7 @@ service wpa_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-service sdcard /system/bin/sdcard /data/media 1023 1023
+service sdcard /system/bin/sdcard /data/media /mnt/shell/emulated 1023 1023
     class late_start
 
 on boot
@@ -363,7 +354,3 @@ service hciattach /system/bin/brcm_patchram_plus --enable_hci --no2bytes \
     group bluetooth net_bt_admin
     disabled
     oneshot
-
-## TEMPORARY. WE NEED AN FSTAB TO USE mount_all
-on property:dev.bootcomplete=1
-   start sdcard
