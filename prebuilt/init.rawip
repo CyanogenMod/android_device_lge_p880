@@ -1,0 +1,24 @@
+#!/system/bin/sh
+
+state=$1
+
+if [ $state == "0" ]; then
+  /system/bin/log -t rmnet "Removing RAW-IP driver"
+
+  rmmod raw_ip_net || {
+	/system/bin/log -t rmnet "FAILED: rmmod raw_ip_net";
+	/system/bin/setprop "net.rmmod.svc_done" "0";
+	exit 1;
+  }
+
+  /system/bin/log -t rmnet "SUCCEED: rmmod raw_ip_net";
+  /system/bin/setprop "net.rmmod.svc_done" "1" 
+else
+  /system/bin/log -t rmnet "Installing RAW-IP driver"
+
+  insmod /system/lib/modules/raw_ip_net.ko || {
+	/system/bin/log -t rmnet "FAILED: insmod raw_ip_net";
+	exit 1;
+  }
+  /system/bin/log -t rmnet "SUCCEED: insmod raw_ip_net";
+fi

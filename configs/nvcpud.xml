@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+    <!-- Permissin required to invoke NvCpuD APIs. -->
+    <assign-permission name="android.permission.NVIDIA_CPU_POWER" uid="media" />
+    <assign-permission name="android.permission.DEVICE_POWER" uid="media" />
+</permissions>

@@ -51,12 +51,12 @@ on boot
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
-    mkdir /data/nvcam 0777 system system
+    mkdir /data/nvcam 0700 media camera
     # we will remap this as /mnt/sdcard with the sdcard fuse tool
     mkdir /data/media 0775 media_rw media_rw
     chown media_rw media_rw /data/media
 
-    insmod /system/lib/modules/tlx251_le.ko "major=245"
+    #insmod /system/lib/modules/tlx251_le.ko "major=245"
 
     chmod 0777 /dev/block/platform/sdhci-tegra.3/by-name/NVA
     chown system sdcard_rw /dev/block/platform/sdhci-tegra.3/by-name/NVA
@@ -78,6 +78,12 @@ on boot
     # FactoryTest AT command
     chmod 0664 /sys/devices/platform/bd_address/bdaddr_if
     chown radio bluetooth /sys/devices/platform/bd_address/bdaddr_if
+
+    # bluetooth LPM
+    chmod 0220 /proc/bluetooth/sleep/lpm
+    chmod 0220 /proc/bluetooth/sleep/btwrite
+    chown bluetooth net_bt_stack /proc/bluetooth/sleep/lpm
+    chown bluetooth net_bt_stack /proc/bluetooth/sleep/btwrite
 
 # backlight
     chown system radio /sys/class/leds/lcd-backlight/brightness
@@ -346,11 +352,14 @@ on post-fs-data
     mkdir /data/lgdrm 0770 system media
     setprop vold.post_fs_data_done 1
 
-service hciattach /system/bin/brcm_patchram_plus --enable_hci --no2bytes \
-     --baudrate 3000000 --patchram /etc/firmware/BCM4330B1_002.001.003.0550.0633.hcd \
-     --enable_lpm --scopcm=0,0,0,0,0,0,0,0,0,0 -d /dev/ttyHS2
-    ## The debug is necessary to make it slower :(
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
+service insmod_rawip /system/bin/init.rawip 1
+   user root
+   group radio cache inet misc
+   disabled
+   oneshot
+
+service rmmod_rawip /system/bin/init.rawip 0
+   user root
+   group radio cache inet misc
+   disabled
+   oneshot

@@ -56,7 +56,9 @@ PRODUCT_COPY_FILES += \
 ## ALSA Config
 
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/configs/asound.conf:system/etc/asound.conf \
+    $(LOCAL_PATH)/configs/nvaudio_conf.xml:system/etc/nvaudio_conf.xml \
     $(LOCAL_PATH)/configs/alsa/pcm/dsnoop.conf:system/usr/share/alsa/pcm/dsnoop.conf \
     $(LOCAL_PATH)/configs/alsa/pcm/center_lfe.conf:system/usr/share/alsa/pcm/center_lfe.conf \
     $(LOCAL_PATH)/configs/alsa/pcm/modem.conf:system/usr/share/alsa/pcm/modem.conf \
@@ -79,6 +81,7 @@ $(call inherit-product, build/target/product/full.mk)
 
 # Permission files
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/nvcpud.xml::system/etc/permissions/nvcpud.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
@@ -113,7 +116,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/init.rmnet:system/bin/init.rmnet \
-    $(LOCAL_PATH)/prebuilt/init.rmnet-down:system/bin/init.rmnet-down
+    $(LOCAL_PATH)/prebuilt/init.rmnet-down:system/bin/init.rmnet-down \
+    $(LOCAL_PATH)/prebuilt/init.rawip:system/bin/init.rawip
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := full_p880
