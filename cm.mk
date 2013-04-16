@@ -22,7 +22,7 @@ PRODUCT_NAME := cm_p880
 PRODUCT_BRAND := lge
 PRODUCT_MANUFACTURER := LGE
 
-PRODUCT_BUILD_PROP_OVERRIDES += PRODUCT_NAME=x3_open_eu BUILD_FINGERPRINT=lge/x3_open_eu/x3:4.0.3/IML74K/LG-P880-V10b.1c153861f5:user/release-keys PRIVATE_BUILD_DESC="x3_open_eu-user 4.0.3 IML74K LG-P880-V10b.1c153861f5 release-keys"
+PRODUCT_BUILD_PROP_OVERRIDES += PRODUCT_NAME=x3_open_eu BUILD_FINGERPRINT=lge/x3_open_eu/x3:4.1.2/JZO54K/P88020a.1e56bb4c69:user/release-keys PRIVATE_BUILD_DESC="x3_open_eu-user 4.1.2 JZO54K P88020a.1e56bb4c69 release-keys"
 
-# Enable Torch and WifiDirect
-PRODUCT_PACKAGES += Torch WiFiDirectDemo
+# Enable Torch
+PRODUCT_PACKAGES += Torch
