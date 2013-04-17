@@ -106,30 +106,30 @@
         <item>867</item>
         <item>900</item>
         <item>1300</item>
-        <item>2000</item>
+        <item>2200</item>
         <item>6000</item>
         <item>9000</item>
     </integer-array>
 
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>23</item>
-        <item>31</item>
-        <item>43</item>
-        <item>48</item>
-        <item>54</item>
-        <item>60</item>
-        <item>71</item>
-        <item>86</item>
-        <item>102</item>
-        <item>103</item>
-        <item>106</item>
-        <item>114</item>
-        <item>123</item>
-        <item>129</item>
-        <item>131</item>
-        <item>166</item>
-        <item>196</item>
-        <item>229</item>
+        <item>75</item>
+        <item>87</item>
+        <item>101</item>
+        <item>105</item>
+        <item>112</item>
+        <item>116</item>
+        <item>127</item>
+        <item>137</item>
+        <item>149</item>
+        <item>151</item>
+        <item>154</item>
+        <item>161</item>
+        <item>169</item>
+        <item>174</item>
+        <item>176</item>
+        <item>202</item>
+        <item>221</item>
+        <item>241</item>
         <item>255</item>
     </integer-array>
 
