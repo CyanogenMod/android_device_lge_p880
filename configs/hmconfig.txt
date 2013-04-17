@@ -1,6 +1,5 @@
 # set to 1 to ignore NVM content and always use the default values
-USE_NVM               = 1
-# was 0 o stock
+USE_NVM               = 0
 
 # default values:
 DEFAULT_GPS_USAGE     = 1
