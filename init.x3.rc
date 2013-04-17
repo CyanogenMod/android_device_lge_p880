@@ -364,3 +364,6 @@ service rmmod_rawip /system/bin/init.rawip 0
    group radio cache inet misc
    disabled
    oneshot
+
+on property:dev.bootcomplete=1
+   write /sys/devices/platform/tegra-i2c.0/i2c-0/0-0039/run_calibration 1
