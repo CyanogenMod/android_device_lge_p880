@@ -17,8 +17,13 @@ public class X3RIL extends RIL implements CommandsInterface {
     @Override
     public void
     getIMEI(Message result) {
-        //RIL_REQUEST_LGE_SEND_COMMAND
+        //RIL_REQUEST_LGE_SEND_COMMAND, 0 and 1
         RILRequest rrLSC = RILRequest.obtain(
+                0x113, null);
+        rrLSC.mp.writeInt(1);
+        rrLSC.mp.writeInt(0);
+        send(rrLSC);
+        rrLSC = RILRequest.obtain(
                 0x113, null);
         rrLSC.mp.writeInt(1);
         rrLSC.mp.writeInt(1);
