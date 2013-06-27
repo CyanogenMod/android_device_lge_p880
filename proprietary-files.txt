@@ -75,9 +75,6 @@ etc/firmware/fw_bcmdhd_p2p.bin
 etc/firmware/fw_bcmdhd_apsta.bin
 etc/firmware/BCM4330B1_002.001.003.0550.0633.hcd
 vendor/firmware/libpn544_fw.so
-lib/egl/libEGL_tegra_impl.so
-lib/egl/libGLESv2_tegra_impl.so
-lib/egl/libGLESv1_CM_tegra_impl.so
 lib/libnvglsi.so
 lib/libnvcamerahdr.so
 lib/libmorpho_noise_reduction.so

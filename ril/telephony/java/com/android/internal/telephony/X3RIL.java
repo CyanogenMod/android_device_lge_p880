@@ -20,13 +20,13 @@ public class X3RIL extends RIL implements CommandsInterface {
         //RIL_REQUEST_LGE_SEND_COMMAND, 0 and 1
         RILRequest rrLSC = RILRequest.obtain(
                 0x113, null);
-        rrLSC.mp.writeInt(1);
-        rrLSC.mp.writeInt(0);
+        rrLSC.mParcel.writeInt(1);
+        rrLSC.mParcel.writeInt(0);
         send(rrLSC);
         rrLSC = RILRequest.obtain(
                 0x113, null);
-        rrLSC.mp.writeInt(1);
-        rrLSC.mp.writeInt(1);
+        rrLSC.mParcel.writeInt(1);
+        rrLSC.mParcel.writeInt(1);
         send(rrLSC);
 
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_IMEI, result);
@@ -43,14 +43,14 @@ public class X3RIL extends RIL implements CommandsInterface {
         RILRequest rr
             = RILRequest.obtain(RIL_REQUEST_QUERY_CALL_FORWARD_STATUS, response);
 
-        rr.mp.writeInt(2); // 2 is for query action, not in use anyway
-        rr.mp.writeInt(cfReason);
+        rr.mParcel.writeInt(2); // 2 is for query action, not in use anyway
+        rr.mParcel.writeInt(cfReason);
         if (serviceClass == 0)
             serviceClass = 255;
-        rr.mp.writeInt(serviceClass);
-        rr.mp.writeInt(PhoneNumberUtils.toaFromString(number));
-        rr.mp.writeString(number);
-        rr.mp.writeInt (0);
+        rr.mParcel.writeInt(serviceClass);
+        rr.mParcel.writeInt(PhoneNumberUtils.toaFromString(number));
+        rr.mParcel.writeString(number);
+        rr.mParcel.writeInt (0);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
                 + " " + cfReason + " " + serviceClass);

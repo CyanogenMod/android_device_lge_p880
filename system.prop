@@ -23,3 +23,5 @@ lge.nfc.defaultonoff=on
 wifi.interface=wlan0
 
 ro.bt.bdaddr_path=/sys/devices/platform/bd_address/bdaddr_if
+
+ro.bq.gpu_to_cpu_unsupported=1
