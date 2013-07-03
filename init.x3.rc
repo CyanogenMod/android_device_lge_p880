@@ -191,6 +191,16 @@ on boot
     write /sys/block/mmcblk0/queue/read_ahead_kb 2048
     write /sys/block/mmcblk1/queue/read_ahead_kb 2048
 
+#LGE_CHANGE_S 20121126, hwansuk.kang@lge.com [data] TCP increase rmem_max value for downlink data throughput
+    write /proc/sys/net/core/rmem_max 393213
+#LGE_CHANGE_E 20121126, hwansuk.kang@lge.com [data] TCP increase rmem_max value for downlink data throughput
+
+#LGE_CHANGE_S 20120720, hwansuk.kang@lge.com [data] Disable IPv6 for mobile network
+    write /proc/sys/net/ipv6/conf/rmnet0/disable_ipv6 1
+    write /proc/sys/net/ipv6/conf/rmnet1/disable_ipv6 1
+    write /proc/sys/net/ipv6/conf/rmnet2/disable_ipv6 1
+#LGE_CHANGE_E 20120720, hwansuk.kang@lge.com [data] Disable IPv6 for mobile network
+
 #LGE_RIL_START sabina.park@lge.com
 service rawip_rmnet1 /system/bin/init.rmnet 1
    user root
@@ -352,6 +362,19 @@ on post-fs-data
     # create directory for lgdrm
     mkdir /data/lgdrm 0770 system media
     setprop vold.post_fs_data_done 1
+
+    # Set buffer sizes from stock (lower readmax) 
+
+    setprop net.tcp.buffersize.default 4096,87380,393216,4096,16384,110208
+    setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
+    setprop net.tcp.buffersize.lte     524288,1048576,2097152,262144,524288,1048576
+    setprop net.tcp.buffersize.umts    4094,87380,393216,4096,16384,110208
+    setprop net.tcp.buffersize.hspa    4094,87380,393216,4096,16384,110208
+    setprop net.tcp.buffersize.hsupa    4094,87380,393216,4096,16384,110208
+    setprop net.tcp.buffersize.hsdpa    4094,87380,393216,4096,16384,110208
+    setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
+    setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
+
 
 service insmod_rawip /system/bin/init.rawip 1
    user root
