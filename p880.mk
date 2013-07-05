@@ -16,20 +16,19 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 LOCAL_PATH := device/lge/p880
 
-## Recovery 
-
+## Recovery
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh \
-    $(LOCAL_PATH)/prebuilt/recovery.sh:system/bin/setup-recovery
+    $(LOCAL_PATH)/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh \
+    $(LOCAL_PATH)/recovery.sh:system/bin/setup-recovery
 
 ## Boot image
-
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.x3.rc:root/init.x3.rc \
+    $(LOCAL_PATH)/init.x3.usb.rc:root/init.x3.usb.rc \
     $(LOCAL_PATH)/ueventd.x3.rc:root/ueventd.x3.rc \
-    $(LOCAL_PATH)/fstab.x3:root/fstab.x3 \
-    $(LOCAL_PATH)/init.x3.usb.rc:root/init.x3.usb.rc
+    $(LOCAL_PATH)/fstab.x3:root/fstab.x3
 
+## Miscellaneous configs
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/ipc_channels.config:system/etc/ipc_channels.config \
     $(LOCAL_PATH)/configs/nfcee_access.xml:system/etc/nfcee_access.xml \
@@ -47,7 +46,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/hmconfig.txt:system/etc/hmconfig.txt
 
 ## Input
-
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/MHLRCP.kl:system/usr/keylayout/MHLRCP.kl \
     $(LOCAL_PATH)/configs/tegra-snd-max98088.kl:system/usr/keylayout/tegra-snd-max98088.kl \
@@ -55,7 +53,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/touch_dev.idc:system/usr/idc/touch_dev.idc
 
 ## ALSA Config
-
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/configs/asound.conf:system/etc/asound.conf \
@@ -92,7 +89,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
-    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \

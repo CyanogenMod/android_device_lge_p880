@@ -171,12 +171,12 @@ static int get_framebuffer(GGLSurface *fb)
 }
 
 static void get_memory_surface(GGLSurface* ms) {
-  ms->version = sizeof(*ms);
-  ms->width = vi.xres;
-  ms->height = vi.yres;
-  ms->stride = fi.line_length/PIXEL_SIZE;
-  ms->data = malloc(fi.line_length * vi.yres);
-  ms->format = PIXEL_FORMAT;
+    ms->version = sizeof(*ms);
+    ms->width = vi.xres;
+    ms->height = vi.yres;
+    ms->stride = fi.line_length/PIXEL_SIZE;
+    ms->data = malloc(fi.line_length * vi.yres);
+    ms->format = PIXEL_FORMAT;
 }
 
 static void set_active_framebuffer(unsigned n)

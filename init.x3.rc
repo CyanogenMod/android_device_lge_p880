@@ -45,7 +45,7 @@ on fs
     chmod 0666 /data/misc/wifi/firmware_path
 
 on boot
-        insmod /system/lib/modules/bthid.ko
+    insmod /system/lib/modules/bthid.ko
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 # --- BRCM
     mkdir /data/misc/wifi 0775 wifi radio
@@ -65,7 +65,7 @@ on boot
 
     chown system system /sys/devices/virtual/input/lge_touch/keyguard
 
-    # Power control interface
+# Power control interface
     chmod 0660 /sys/class/rfkill/rfkill0/state
     chmod 0660 /sys/class/rfkill/rfkill0/type
     chmod 0660 /sys/class/rfkill/rfkill1/state
@@ -76,11 +76,11 @@ on boot
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/type
     write /sys/class/rfkill/rfkill0/state 0
 
-    # FactoryTest AT command
+# FactoryTest AT command
     chmod 0664 /sys/devices/platform/bd_address/bdaddr_if
     chown radio bluetooth /sys/devices/platform/bd_address/bdaddr_if
 
-    # bluetooth LPM
+# bluetooth LPM
     chmod 0220 /proc/bluetooth/sleep/lpm
     chmod 0220 /proc/bluetooth/sleep/btwrite
     chown bluetooth net_bt_stack /proc/bluetooth/sleep/lpm
@@ -96,6 +96,7 @@ on boot
     chown system radio /sys/class/leds/button-backlight/br_maintain_on
     chmod 0664 /sys/class/leds/button-backlight/br_maintain_on
     chown system radio /sys/devices/platform/gpio-keys.0/key_test_mode
+
 # RGB bridge IC(SSD2825)
     chown system radio /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     chown system radio /sys/devices/platform/spi_tegra.4/spi4.2/gamma_saved
@@ -109,10 +110,12 @@ on boot
     chmod 0660 /sys/devices/platform/spi_tegra.4/spi4.2/mipi_lp
     chmod 0660 /sys/devices/platform/spi_tegra.4/spi4.2/mipi_hs
     chmod 0660 /sys/devices/platform/spi_tegra.4/spi4.2/reg_dump
+
 # fuelgauge
     #chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-0036/state
     chown system radio /sys/class/power_supply/fuelgauge/device/state
     chown system radio /sys/class/power_supply/charger/device/chgcc_ta
+
 # didim
     chown system system /sys/devices/nvhost/tegradc.0/smartdimmer/enable
     chown system system /sys/devices/nvhost/tegradc.0/smartdimmer/aggressiveness
@@ -122,15 +125,15 @@ on boot
     chown system system /sys/kernel/tegra_cap/core_cap_level
     chown system system /sys/kernel/tegra_cap/core_cap_state
     chown system system /sys/module/cpu_tegra/parameters/cpu_user_cap
-        chown system system /sys/module/cpu_tegra/parameters/force_disable_edp
+    chown system system /sys/module/cpu_tegra/parameters/force_disable_edp
 
 # sangwon.jeon for gyro and accel.
-     chmod 0666 dev/mpu
-     chmod 0666 dev/mpuirq
-     chmod 0666 dev/slaveirq
-     chmod 0666 dev/timerirq
+    chmod 0666 dev/mpu
+    chmod 0666 dev/mpuirq
+    chmod 0666 dev/slaveirq
+    chmod 0666 dev/timerirq
 
-#PROXIMITY SENSOR
+# PROXIMITY SENSOR
     chown system system /sys/bus/i2c/drivers/apds990x/0-0039/enable_ps_sensor
     chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/enable_ps_sensor
     chown system system /sys/bus/i2c/drivers/apds990x/0-0039/enable_als_sensor
@@ -153,8 +156,8 @@ on boot
     chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/ps_data
     chown system system /sys/bus/i2c/drivers/apds990x/0-0039/is_white
     chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/is_white
-        chown system system /sys/bus/i2c/drivers/apds990x/0-0039/ps_cal_result
-        chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/ps_cal_result
+    chown system system /sys/bus/i2c/drivers/apds990x/0-0039/ps_cal_result
+    chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/ps_cal_result
 
 # Power management settings
     write /sys/module/cpu_tegra3/parameters/no_lp 0
@@ -203,29 +206,29 @@ on boot
 
 #LGE_RIL_START sabina.park@lge.com
 service rawip_rmnet1 /system/bin/init.rmnet 1
-   user root
-   group radio cache inet misc
-   disabled
-   oneshot
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
 
 service rawip_rmnet2 /system/bin/init.rmnet 2
-   user root
-   group radio cache inet misc
-   disabled
-   oneshot
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
 
 # used to down HSI interfaces on RIL Recovery
 service rmnet1_down /system/bin/init.rmnet-down 1
-   user root
-   group radio cache inet misc
-   disabled
-   oneshot
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
 
 service rmnet2_down /system/bin/init.rmnet-down 2
-   user root
-   group radio cache inet misc
-   disabled
-   oneshot
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
 
 service dhcpcd_wlan0 /system/bin/dhcpcd -aBKAL
     class core
@@ -248,24 +251,24 @@ service iprenew_p2p /system/bin/dhcpcd -n
     oneshot
 
 service p2p_supplicant /system/bin/wpa_supplicant \
-        -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -N \
-        -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf -e/data/misc/wifi/entropy.bin -puse_p2p_group_interface=1
-        #   we will start as root and wpa_supplicant will switch to user wifi
-        #   after setting up the capabilities required for WEXT
-        #   user wifi
-        #   group wifi inet keystore
-        class main
-        socket wpa_wlan0 dgram 660 wifi wifi
-        disabled
-        oneshot
+    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -N \
+    -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf -e/data/misc/wifi/entropy.bin -puse_p2p_group_interface=1
+    # we will start as root and wpa_supplicant will switch to user wifi
+    # after setting up the capabilities required for WEXT
+    # user wifi
+    # group wifi inet keystore
+    class main
+    socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
 
 service wpa_supplicant /system/bin/wpa_supplicant \
-        -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -e/data/misc/wifi/entropy.bin
-        #   we will start as root and wpa_supplicant will switch to user wifi
-        #   after setting up the capabilities required for WEXT
-        #   user wifi
-        #   group wifi inet keystore
-        class main
+    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -e/data/misc/wifi/entropy.bin
+    # we will start as root and wpa_supplicant will switch to user wifi
+    # after setting up the capabilities required for WEXT
+    # user wifi
+    # group wifi inet keystore
+    class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
@@ -274,7 +277,7 @@ service sdcard /system/bin/sdcard /data/media /mnt/shell/emulated 1023 1023
     class late_start
 
 on boot
-  write /sys/class/gpio/export 61
+    write /sys/class/gpio/export 61
 
     chown system system /sys/devices/platform/gps_gpio/poweron
     chown system system /sys/devices/platform/gps_gpio/reset
@@ -285,8 +288,8 @@ on boot
     chown system system /data/gps
     chmod 770 /system/etc/cert/lge.cer
     chown system system /system/etc/cert/lge.cer
-        chmod 770 /system/etc/hmconfig.txt
-        chown system system /system/etc/hmconfig.txt
+    chmod 770 /system/etc/hmconfig.txt
+    chown system system /system/etc/hmconfig.txt
     chown audio audio /dev/pts29
 
     mkdir /cal/secclk 0770 system system
@@ -308,28 +311,28 @@ service nvcpud /system/bin/nvcpud
     group root
 
 service charger /charger
-        class charger
-        user root
-        group root
-        oneshot
+    class charger
+    user root
+    group root
+    oneshot
 
 #service hdmid /system/bin/hdmid
 #    class core
 #    socket hdmid stream 0660 root system graphics
 #    user system
-#        group system
+#    group system
 
 on boot
     chown system system /sys/power/lge_logstart
     chmod 0660 /sys/power/lge_logstart
 
 service rdlsc /system/xbin/rdlsc
-   user root
-   group root
-   oneshot
-on boot
-   start rdlsc
+    user root
+    group root
+    oneshot
 
+on boot
+    start rdlsc
 
 service lgsecclk /system/bin/lgsecclkserver
     class main
@@ -338,7 +341,7 @@ service lgsecclk /system/bin/lgsecclkserver
 
 # restart when servicemanager is restarted
 on property:init.svc.servicemanager=restarting
-     restart lgsecclk
+    restart lgsecclk
 
 ########################################
 # CAPP_DRM
@@ -356,7 +359,7 @@ service tf_daemon /system/bin/tf_daemon -storageDir /cal/widevine -d
 
 # restart when servicemanager is restarted
 on property:init.svc.servicemanager=restarting
-     restart lgdrm
+    restart lgdrm
 
 on post-fs-data
     # create directory for lgdrm
@@ -364,29 +367,27 @@ on post-fs-data
     setprop vold.post_fs_data_done 1
 
     # Set buffer sizes from stock (lower readmax) 
-
     setprop net.tcp.buffersize.default 4096,87380,393216,4096,16384,110208
     setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
     setprop net.tcp.buffersize.lte     524288,1048576,2097152,262144,524288,1048576
     setprop net.tcp.buffersize.umts    4094,87380,393216,4096,16384,110208
     setprop net.tcp.buffersize.hspa    4094,87380,393216,4096,16384,110208
-    setprop net.tcp.buffersize.hsupa    4094,87380,393216,4096,16384,110208
-    setprop net.tcp.buffersize.hsdpa    4094,87380,393216,4096,16384,110208
+    setprop net.tcp.buffersize.hsupa   4094,87380,393216,4096,16384,110208
+    setprop net.tcp.buffersize.hsdpa   4094,87380,393216,4096,16384,110208
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
 
-
 service insmod_rawip /system/bin/init.rawip 1
-   user root
-   group radio cache inet misc
-   disabled
-   oneshot
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
 
 service rmmod_rawip /system/bin/init.rawip 0
-   user root
-   group radio cache inet misc
-   disabled
-   oneshot
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
 
 on property:dev.bootcomplete=1
-   write /sys/devices/platform/tegra-i2c.0/i2c-0/0-0039/run_calibration 1
+    write /sys/devices/platform/tegra-i2c.0/i2c-0/0-0039/run_calibration 1

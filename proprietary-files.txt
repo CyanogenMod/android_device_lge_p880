@@ -71,7 +71,6 @@ etc/firmware/nvavp_os_0ff00000.bin
 etc/firmware/nvavp_os_eff00000.bin
 etc/firmware/nvavp_vid_ucode_alt.bin
 etc/firmware/nvavp_vid_ucode.bin
-etc/firmware/fw_bcmdhd.bin
 etc/firmware/fw_bcmdhd_p2p.bin
 etc/firmware/fw_bcmdhd_apsta.bin
 etc/firmware/BCM4330B1_002.001.003.0550.0633.hcd
