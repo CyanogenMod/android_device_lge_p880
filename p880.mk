@@ -18,8 +18,8 @@ LOCAL_PATH := device/lge/p880
 
 ## Recovery
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh \
-    $(LOCAL_PATH)/recovery.sh:system/bin/setup-recovery
+    $(LOCAL_PATH)/prebuilt/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh \
+    $(LOCAL_PATH)/prebuilt/recovery.sh:system/bin/setup-recovery
 
 ## Boot image
 PRODUCT_COPY_FILES += \
