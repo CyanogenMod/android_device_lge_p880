@@ -1,0 +1,15 @@
+#!/system/bin/sh
+
+L="log -p i -t SELinuxLabelX3"
+
+# Bail out early if not on a SELinux build
+getprop ro.build.selinux | grep -q 1 || exit
+if [ ! -f /file_contexts ]; then
+  exit
+fi
+
+ls -Zd /cal | grep -q unlabeled
+if [ $? -eq 0 ]; then
+  $L "/cal is unlabeled, fixing..."
+  restorecon -R /cal
+fi

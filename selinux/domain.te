@@ -4,5 +4,17 @@ allow surfaceflinger { sysfs_devices_tegradc }:file w_file_perms;
 allow surfaceflinger tee_device:chr_file rw_file_perms;
 
 allow mediaserver { nvhost_writable_device nv_device nvhost_device }:chr_file rw_file_perms;
+allow mediaserver nvcam_data_files:file rw_file_perms;
 
 allow appdomain { nvhost_writable_device nv_device }:chr_file rw_file_perms;
+
+## For "nvram", mmcblk0p7
+allow rild radio_device:blk_file rw_file_perms;
+allow rild radio_data_file:file { rw_file_perms setattr };
+
+## /cal/* files
+allow system calibration_data_file:file rw_file_perms;
+allow tee calibration_data_file:file rw_file_perms;
+allow tee calibration_data_file:dir rw_file_perms;
+allow tee calibration_data_file:dir search;
+

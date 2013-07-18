@@ -8,5 +8,28 @@
 /dev/nvhost-gr3d                  u:object_r:nvhost_writable_device:s0
 /dev/nvhdcp.                      u:object_r:video_device:s0
 
+/dev/pn544                        u:object_r:nfc_device:s0
+
 /sys/devices/tegradc\.0(/.*)?                u:object_r:sysfs_devices_tegradc:s0
 /sys/devices/tegradc\.1(/.*)?                u:object_r:sysfs_devices_tegradc:s0
+
+# radio
+/data/misc/wifi/config_mac       u:object_r:radio_data_file:s0
+/dev/block/platform/sdhci-tegra.3/by-name/NVA  u:object_r:radio_device:s0
+/dev/block/mmcblk0p7             u:object_r:radio_device:s0
+/dev/ttyACM0                     u:object_r:radio_device:s0
+/dev/pts[0-9]*                   u:object_r:radio_device:s0
+/dev/pts17                       u:object_r:gps_device:s0
+/dev/ttyHS1                      u:object_r:gps_device:s0
+
+# camera
+/dev/lm3559                      u:object_r:camera_device:s0
+/dev/imx111                      u:object_r:camera_device:s0
+/dev/dw9714                      u:object_r:camera_device:s0
+/data/nvcam(/.*)?                u:object_r:nvcam_data_files:s0
+
+# sensors
+/dev/timerirq                    u:object_r:sensors_device:s0
+
+# calibration
+/cal(/.*)?                       u:object_r:calibration_data_file:s0
