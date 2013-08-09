@@ -92,3 +92,5 @@ BOARD_SEPOLICY_UNION := \
     domain.te
 
 endif
+
+BOARD_HARDWARE_CLASS := device/lge/p880/cmhw/

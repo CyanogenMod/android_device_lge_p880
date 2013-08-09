@@ -377,6 +377,14 @@ on post-fs-data
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
 
+# Hardware tunable perms
+    chown root system /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
+    chown root system /sys/devices/platform/tspdrv/nforce_timed
+    chmod 0664 /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
+    chmod 0664 /sys/devices/platform/tspdrv/nforce_timed
+    restorecon /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
+    restorecon /sys/devices/platform/tspdrv/nforce_timed
+
 service insmod_rawip /system/bin/init.rawip 1
     user root
     group radio cache inet misc
