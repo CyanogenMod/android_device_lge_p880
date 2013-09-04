@@ -3,12 +3,15 @@ package com.android.internal.telephony;
 import static com.android.internal.telephony.RILConstants.*;
 
 import android.content.Context;
+import android.os.AsyncResult;
+import android.os.Handler;
 import android.os.Message;
 import android.os.Parcel;
 
 import android.telephony.PhoneNumberUtils;
 
 public class X3RIL extends RIL implements CommandsInterface {
+    private boolean sentHwBootstrap = false;
 
     public X3RIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
@@ -17,16 +20,11 @@ public class X3RIL extends RIL implements CommandsInterface {
     @Override
     public void
     getIMEI(Message result) {
-        //RIL_REQUEST_LGE_SEND_COMMAND, 0 and 1
+        //RIL_REQUEST_LGE_SEND_COMMAND 0
         RILRequest rrLSC = RILRequest.obtain(
                 0x113, null);
         rrLSC.mp.writeInt(1);
         rrLSC.mp.writeInt(0);
-        send(rrLSC);
-        rrLSC = RILRequest.obtain(
-                0x113, null);
-        rrLSC.mp.writeInt(1);
-        rrLSC.mp.writeInt(1);
         send(rrLSC);
 
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_IMEI, result);
@@ -107,6 +105,93 @@ public class X3RIL extends RIL implements CommandsInterface {
                 }
                 break;
         }
+    }
+
+    protected void
+    processSolicited (Parcel p) {
+        int serial, error;
+        boolean found = false;
+        int dataPosition = p.dataPosition(); // save off position within the Parcel
+        serial = p.readInt();
+        error = p.readInt();
+
+        RILRequest rr = null;
+
+        /* Pre-process the reply before popping it */
+        synchronized (mRequestsList) {
+            for (int i = 0, s = mRequestsList.size() ; i < s ; i++) {
+                RILRequest tr = mRequestsList.get(i);
+                if (tr.mSerial == serial) {
+                    if (error == 0 || p.dataAvail() > 0) {
+                        try {switch (tr.mRequest) {
+                            /* Get those we're interested in */
+                            case 0x113:
+                                rr = tr;
+                                break;
+                        }} catch (Throwable thr) {
+                            // Exceptions here usually mean invalid RIL responses
+                            if (rr.mResult != null) {
+                                AsyncResult.forMessage(rr.mResult, null, thr);
+                                rr.mResult.sendToTarget();
+                            }
+                            rr.release();
+                            return;
+                        }
+                    } 
+                }
+            }
+        }
+
+        if (rr == null) {
+            /* Nothing we care about, go up */
+            p.setDataPosition(dataPosition);
+
+            // Forward responses that we are not overriding to the super class
+            super.processSolicited(p);
+        }
+
+
+        rr = findAndRemoveRequestFromList(serial);
+
+        if (rr == null) {
+            return;
+        }
+
+        Object ret = null;
+
+        if (error == 0 || p.dataAvail() > 0) {
+            switch (rr.mRequest) {
+                case 0x113: ret =  responseVoid(p); break;
+                default:
+                    throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
+            }
+            //break;
+        }
+
+        switch (rr.mRequest) {
+            case 0x113:
+                riljLog(rr.serialString() + "< LGE_SEND_COMMAND"
+                        + " " + retToString(rr.mRequest, ret));
+                /* COMMAND 1 inits hardware-related properties. We
+                 * only need it once per power cycle */
+                if (!sentHwBootstrap) {
+                    RILRequest rrLSC = RILRequest.obtain(
+                            0x113, null);
+                    rrLSC.mp.writeInt(1);
+                    rrLSC.mp.writeInt(1);
+                    send(rrLSC);
+                    sentHwBootstrap = true;
+                }
+                break;
+        }
+
+
+        if (rr.mResult != null) {
+            AsyncResult.forMessage(rr.mResult, ret, null);
+            rr.mResult.sendToTarget();
+        }
+
+        rr.release();
     }
 
 }
