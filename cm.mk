@@ -1,7 +1,9 @@
 ## Specify phone tech before including full_phone
 $(call inherit-product, vendor/cm/config/gsm.mk)
 
-TARGET_BOOTANIMATION_NAME := vertical-720x1280
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1280
+TARGET_SCREEN_WIDTH := 720
 
 # Release name
 PRODUCT_RELEASE_NAME := p880
