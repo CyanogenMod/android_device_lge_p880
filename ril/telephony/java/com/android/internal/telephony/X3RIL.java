@@ -7,6 +7,7 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcel;
+import android.os.SystemService;
 
 import android.telephony.PhoneNumberUtils;
 
@@ -58,8 +59,25 @@ public class X3RIL extends RIL implements CommandsInterface {
 
     static final int RIL_UNSOL_LGE_BATTERY_LEVEL_UPDATE = 1050;
     static final int RIL_UNSOL_LGE_XCALLSTAT = 1053;
+    static final int RIL_UNSOL_LGE_RESTART_RILD = 1055;
     static final int RIL_UNSOL_LGE_SELECTED_SPEECH_CODEC = 1074;
     static final int RIL_UNSOL_LGE_SIM_STATE_CHANGED_NEW = 1061;
+
+    private void restartRild() {
+        setRadioState(RadioState.RADIO_UNAVAILABLE);
+        SystemService.stop("ril-daemon");
+        RILRequest.resetSerial();
+
+        // Clear request list
+        clearRequestList(RADIO_NOT_AVAILABLE, false);
+        // Thread sleeps are ususally a terrible idea, but we do want the radio
+        // stack to back off for a bit
+        SystemService.start("ril-daemon");
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ie) {}
+        setRadioState(RadioState.RADIO_ON);
+    }
 
     @Override
     protected void
@@ -74,6 +92,7 @@ public class X3RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_LGE_XCALLSTAT: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_SELECTED_SPEECH_CODEC: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_SIM_STATE_CHANGED_NEW: ret =  responseVoid(p); break;
+            case RIL_UNSOL_LGE_RESTART_RILD: ret =  responseVoid(p); break;
             default:
                 // Rewind the Parcel
                 p.setDataPosition(dataPosition);
@@ -92,6 +111,9 @@ public class X3RIL extends RIL implements CommandsInterface {
                     setNetworkSelectionModeAutomatic(null);
                 }
                 return;
+            case RIL_UNSOL_LGE_RESTART_RILD:
+                restartRild();
+                break;
             case RIL_UNSOL_LGE_BATTERY_LEVEL_UPDATE:
             case RIL_UNSOL_LGE_XCALLSTAT:
             case RIL_UNSOL_LGE_SELECTED_SPEECH_CODEC:
