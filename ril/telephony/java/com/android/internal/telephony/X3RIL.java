@@ -69,7 +69,7 @@ public class X3RIL extends RIL implements CommandsInterface {
         RILRequest.resetSerial();
 
         // Clear request list
-        clearRequestList(RADIO_NOT_AVAILABLE, false);
+        clearRequestsList(RADIO_NOT_AVAILABLE, false);
         // Thread sleeps are ususally a terrible idea, but we do want the radio
         // stack to back off for a bit
         SystemService.start("ril-daemon");
