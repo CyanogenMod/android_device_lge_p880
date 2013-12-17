@@ -129,7 +129,8 @@ public class X3RIL extends RIL implements CommandsInterface {
         }
     }
 
-    protected void
+    @Override
+    protected RILRequest
     processSolicited (Parcel p) {
         int serial, error;
         boolean found = false;
@@ -143,7 +144,7 @@ public class X3RIL extends RIL implements CommandsInterface {
         synchronized (mRequestList) {
             for (int i = 0, s = mRequestList.size() ; i < s ; i++) {
                 RILRequest tr = mRequestList.get(i);
-                if (tr.mSerial == serial) {
+                if (tr!=null && tr.mSerial == serial) {
                     if (error == 0 || p.dataAvail() > 0) {
                         try {switch (tr.mRequest) {
                             /* Get those we're interested in */
@@ -152,12 +153,11 @@ public class X3RIL extends RIL implements CommandsInterface {
                                 break;
                         }} catch (Throwable thr) {
                             // Exceptions here usually mean invalid RIL responses
-                            if (rr.mResult != null) {
-                                AsyncResult.forMessage(rr.mResult, null, thr);
-                                rr.mResult.sendToTarget();
+                            if (tr.mResult != null) {
+                                AsyncResult.forMessage(tr.mResult, null, thr);
+                                tr.mResult.sendToTarget();
                             }
-                            rr.release();
-                            return;
+                            return tr;
                         }
                     } 
                 }
@@ -169,14 +169,14 @@ public class X3RIL extends RIL implements CommandsInterface {
             p.setDataPosition(dataPosition);
 
             // Forward responses that we are not overriding to the super class
-            super.processSolicited(p);
+            return super.processSolicited(p);
         }
 
 
         rr = findAndRemoveRequestFromList(serial);
 
         if (rr == null) {
-            return;
+            return rr;
         }
 
         Object ret = null;
@@ -213,7 +213,7 @@ public class X3RIL extends RIL implements CommandsInterface {
             rr.mResult.sendToTarget();
         }
 
-        rr.release();
+        return rr;
     }
 
 }

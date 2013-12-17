@@ -124,3 +124,5 @@ PRODUCT_NAME := full_p880
 PRODUCT_DEVICE := p880
 PRODUCT_MODEL := LG-P880
 PRODUCT_MANUFACTURER := LGE
+
+$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)

@@ -80,10 +80,6 @@
 
     <bool name="config_wifi_background_scan_support">true</bool>
 
-    <!-- Component name of the default wallpaper. This will be ImageWallpaper if not
-                  specified -->
-    <string name="default_wallpaper_component">com.android.phasebeam/.PhaseBeamWallpaper</string>
-
     <bool name="config_disableMenuKeyInLockScreen">true</bool>
 
     <bool name="config_automatic_brightness_available">true</bool>
@@ -176,4 +172,9 @@
     </integer-array>
 
     <integer name="config_deviceHardwareKeys">7</integer>
+
+    <bool name="config_enableLockScreenTranslucentDecor">true</bool>
+
+    <bool name="config_enableTorch">true</bool>
+
 </resources>
