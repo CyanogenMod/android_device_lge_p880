@@ -78,6 +78,9 @@ BOARD_HAVE_PRE_KITKAT_AUDIO_BLOB := true
 ## Radio fixes
 BOARD_RIL_CLASS := ../../../device/lge/p880/ril/
 
+# Override healthd HAL
+BOARD_HAL_STATIC_LIBRARIES := libhealthd.x3
+
 BOARD_CUSTOM_GRAPHICS := ../../../device/lge/p880/recovery-gfx.c
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/lge/p880/recovery-keys.c
 BOARD_CHARGER_ENABLE_SUSPEND := true
