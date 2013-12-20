@@ -23,8 +23,11 @@
     <!-- Full path to the sysfs toggle -->
     <string name="flashDevice">/sys/devices/platform/tegra-i2c.2/i2c-2/2-0053/torch</string>
 
-    <!-- Lowest setting -->
-    <integer name="valueOn">1</integer>
+    <!-- On setting -->
+    <integer name="valueOn">10</integer>
+
+    <!-- Low setting -->
+    <integer name="valueLow">10</integer>
     <!-- Middle setting -->
-    <integer name="valueHigh">2</integer>
+    <integer name="valueHigh">30</integer>
 </resources>
