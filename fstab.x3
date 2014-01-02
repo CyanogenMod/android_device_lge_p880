@@ -6,5 +6,5 @@
 /dev/block/platform/sdhci-tegra.3/by-name/CAL /cal ext4 nosuid,nodev,barrier=1 wait
 /dev/block/platform/sdhci-tegra.3/by-name/DRM /persist-lg ext4 nosuid,nodev,barrier=1 wait
 /dev/block/platform/sdhci-tegra.3/by-name/MLT /mpt ext4 nosuid,nodev,barrier=1,data=ordered wait
-/devices/platform/sdhci-tegra.2/mmc_host/mmc2 auto auto defaults voldmanaged=sdcard:auto
+/devices/platform/sdhci-tegra.2/mmc_host/mmc2 auto auto defaults voldmanaged=sdcard1:auto
 
