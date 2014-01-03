@@ -209,6 +209,10 @@ on boot
     write /proc/sys/net/ipv6/conf/rmnet2/disable_ipv6 1
 #LGE_CHANGE_E 20120720, hwansuk.kang@lge.com [data] Disable IPv6 for mobile network
 
+# didim
+    chown system system /sys/class/graphics/fb0/device/smartdimmer/enable
+    chown system system /sys/class/graphics/fb0/device/smartdimmer/aggressiveness
+
 #LGE_RIL_START sabina.park@lge.com
 service rawip_rmnet1 /system/bin/init.rmnet 1
     user root
@@ -399,6 +403,8 @@ on post-fs-data
     chmod 0664 /sys/devices/platform/tspdrv/nforce_timed
     restorecon /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     restorecon /sys/devices/platform/tspdrv/nforce_timed
+    restorecon /sys/devices/tegradc.0/smartdimmer/aggressiveness
+    restorecon /sys/devices/tegradc.0/smartdimmer/enable
 
 service insmod_rawip /system/bin/init.rawip 1
     user root
