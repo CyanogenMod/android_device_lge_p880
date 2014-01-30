@@ -54,5 +54,5 @@
       <value>178</value>  <!-- 1.5 GHz -->
   </array>
   <!-- This is the battery capacity in mAh -->
-  <item name="battery.capacity">2050</item>
+  <item name="battery.capacity">2150</item>
 </device>
