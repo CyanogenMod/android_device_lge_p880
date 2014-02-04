@@ -1,6 +1,3 @@
-## Specify phone tech before including full_phone
-$(call inherit-product, vendor/cm/config/gsm.mk)
-
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1280
 TARGET_SCREEN_WIDTH := 720
@@ -18,7 +15,7 @@ $(call inherit-product, vendor/cm/config/nfc_enhanced.mk)
 $(call inherit-product, device/lge/p880/p880.mk)
 
 ## Device identifier. This must come after all inclusions
-PRODUCT_RELEASE_NAME := Optimus4X
+PRODUCT_RELEASE_NAME := Optimus4XHD
 PRODUCT_DEVICE := p880
 PRODUCT_NAME := cm_p880
 PRODUCT_BRAND := lge
