@@ -20,23 +20,6 @@ public class X3RIL extends RIL implements CommandsInterface {
 
     @Override
     public void
-    getIMEI(Message result) {
-        //RIL_REQUEST_LGE_SEND_COMMAND 0
-        RILRequest rrLSC = RILRequest.obtain(
-                0x113, null);
-        rrLSC.mParcel.writeInt(1);
-        rrLSC.mParcel.writeInt(0);
-        send(rrLSC);
-
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_IMEI, result);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        send(rr);
-    }
-
-    @Override
-    public void
     queryCallForwardStatus(int cfReason, int serviceClass,
                 String number, Message response) {
         RILRequest rr
@@ -80,11 +63,14 @@ public class X3RIL extends RIL implements CommandsInterface {
         send(rr);
     }
 
+    static final int RIL_UNSOL_LGE_STK_PROACTIVE_SESSION_STATUS = 1041;
+    static final int RIL_UNSOL_LGE_NETWORK_REGISTRATION_ERROR = 1047;
     static final int RIL_UNSOL_LGE_BATTERY_LEVEL_UPDATE = 1050;
     static final int RIL_UNSOL_LGE_XCALLSTAT = 1053;
     static final int RIL_UNSOL_LGE_RESTART_RILD = 1055;
     static final int RIL_UNSOL_LGE_SELECTED_SPEECH_CODEC = 1074;
     static final int RIL_UNSOL_LGE_SIM_STATE_CHANGED_NEW = 1061;
+    static final int RIL_UNSOL_LGE_FACTORY_READY = 1080;
 
     private void restartRild() {
         setRadioState(RadioState.RADIO_UNAVAILABLE);
@@ -110,12 +96,15 @@ public class X3RIL extends RIL implements CommandsInterface {
         int response = p.readInt();
 
         switch(response) {
+            case RIL_UNSOL_LGE_STK_PROACTIVE_SESSION_STATUS: ret =  responseVoid(p); break;
+            case RIL_UNSOL_LGE_NETWORK_REGISTRATION_ERROR: ret =  responseVoid(p); break;
             case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_BATTERY_LEVEL_UPDATE: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_XCALLSTAT: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_SELECTED_SPEECH_CODEC: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_SIM_STATE_CHANGED_NEW: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_RESTART_RILD: ret =  responseVoid(p); break;
+            case RIL_UNSOL_LGE_FACTORY_READY: ret =  responseVoid(p); break;
             default:
                 // Rewind the Parcel
                 p.setDataPosition(dataPosition);
@@ -134,9 +123,19 @@ public class X3RIL extends RIL implements CommandsInterface {
                     setNetworkSelectionModeAutomatic(null);
                 }
                 return;
+            case RIL_UNSOL_LGE_FACTORY_READY:
+                //RIL_REQUEST_LGE_SEND_COMMAND 0
+                RILRequest rrLSC = RILRequest.obtain(
+                        0x113, null);
+                rrLSC.mParcel.writeInt(1);
+                rrLSC.mParcel.writeInt(0);
+                send(rrLSC);
+                break;
             case RIL_UNSOL_LGE_RESTART_RILD:
                 restartRild();
                 break;
+            case RIL_UNSOL_LGE_STK_PROACTIVE_SESSION_STATUS:
+            case RIL_UNSOL_LGE_NETWORK_REGISTRATION_ERROR:
             case RIL_UNSOL_LGE_BATTERY_LEVEL_UPDATE:
             case RIL_UNSOL_LGE_XCALLSTAT:
             case RIL_UNSOL_LGE_SELECTED_SPEECH_CODEC:
@@ -153,90 +152,17 @@ public class X3RIL extends RIL implements CommandsInterface {
     }
 
     @Override
-    protected RILRequest
-    processSolicited (Parcel p) {
-        int serial, error;
-        boolean found = false;
-        int dataPosition = p.dataPosition(); // save off position within the Parcel
-        serial = p.readInt();
-        error = p.readInt();
-
-        RILRequest rr = null;
-
-        /* Pre-process the reply before popping it */
-        synchronized (mRequestList) {
-            for (int i = 0, s = mRequestList.size() ; i < s ; i++) {
-                RILRequest tr = mRequestList.get(i);
-                if (tr!=null && tr.mSerial == serial) {
-                    if (error == 0 || p.dataAvail() > 0) {
-                        try {switch (tr.mRequest) {
-                            /* Get those we're interested in */
-                            case 0x113:
-                                rr = tr;
-                                break;
-                        }} catch (Throwable thr) {
-                            // Exceptions here usually mean invalid RIL responses
-                            if (tr.mResult != null) {
-                                AsyncResult.forMessage(tr.mResult, null, thr);
-                                tr.mResult.sendToTarget();
-                            }
-                            return tr;
-                        }
-                    } 
-                }
+    public void getImsRegistrationState(Message result) {
+        if(mRilVersion >= 8)
+            super.getImsRegistrationState(result);
+        else {
+            if (result != null) {
+                CommandException ex = new CommandException(
+                    CommandException.Error.REQUEST_NOT_SUPPORTED);
+                AsyncResult.forMessage(result, null, ex);
+                result.sendToTarget();
             }
         }
-
-        if (rr == null) {
-            /* Nothing we care about, go up */
-            p.setDataPosition(dataPosition);
-
-            // Forward responses that we are not overriding to the super class
-            return super.processSolicited(p);
-        }
-
-
-        rr = findAndRemoveRequestFromList(serial);
-
-        if (rr == null) {
-            return rr;
-        }
-
-        Object ret = null;
-
-        if (error == 0 || p.dataAvail() > 0) {
-            switch (rr.mRequest) {
-                case 0x113: ret =  responseVoid(p); break;
-                default:
-                    throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
-            }
-            //break;
-        }
-
-        switch (rr.mRequest) {
-            case 0x113:
-                riljLog(rr.serialString() + "< LGE_SEND_COMMAND"
-                        + " " + retToString(rr.mRequest, ret));
-                /* COMMAND 1 inits hardware-related properties. We
-                 * only need it once per power cycle */
-                if (!sentHwBootstrap) {
-                    RILRequest rrLSC = RILRequest.obtain(
-                            0x113, null);
-                    rrLSC.mParcel.writeInt(1);
-                    rrLSC.mParcel.writeInt(1);
-                    send(rrLSC);
-                    sentHwBootstrap = true;
-                }
-                break;
-        }
-
-
-        if (rr.mResult != null) {
-            AsyncResult.forMessage(rr.mResult, ret, null);
-            rr.mResult.sendToTarget();
-        }
-
-        return rr;
     }
 
 }
