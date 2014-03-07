@@ -33,3 +33,4 @@
 # Hardware tunables
 /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning  u:object_r:sysfs_writable:s0
 /sys/devices/platform/tspdrv/nforce_timed              u:object_r:sysfs_writable:s0
+/sys/devices/virtual/input/lge_touch/keypad_enable     u:object_r:sysfs_writable:s0
