@@ -389,12 +389,15 @@ on post-fs-data
 # Hardware tunable perms
     chown root system /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     chown root system /sys/devices/platform/tspdrv/nforce_timed
+    chown root system /sys/devices/virtual/input/lge_touch/keypad_enable
     chmod 0664 /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     chmod 0664 /sys/devices/platform/tspdrv/nforce_timed
+    chmod 0664 /sys/devices/virtual/input/lge_touch/keypad_enable
     restorecon /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     restorecon /sys/devices/platform/tspdrv/nforce_timed
     restorecon /sys/devices/tegradc.0/smartdimmer/aggressiveness
     restorecon /sys/devices/tegradc.0/smartdimmer/enable
+    restorecon /sys/devices/virtual/input/lge_touch/keypad_enable
 
 service insmod_rawip /system/bin/init.rawip 1
     user root
