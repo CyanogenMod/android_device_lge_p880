@@ -12,13 +12,9 @@ ro.opengles.version=131072
 
 persist.sys.usb.config=mtp,adb
 
-#NFC
+# NFC
 debug.nfc.fw_download=true
 debug.nfc.se=false
-ro.nfc.port=I2C
-lge.nfc.fwpatchv13=yes
-lge.nfc.indicator=yes
-lge.nfc.defaultonoff=on
 
 wifi.interface=wlan0
 
