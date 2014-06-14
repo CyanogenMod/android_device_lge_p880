@@ -21,6 +21,7 @@ on init
     export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
     export EMULATED_STORAGE_TARGET /storage/emulated
     export SECONDARY_STORAGE /storage/sdcard1
+    export EXTERNAL_STORAGE_USB /storage/usbdisk
 
 
     # Support legacy paths
@@ -31,8 +32,15 @@ on init
 
     mkdir /storage/sdcard1 0000 system system
 
+# USB OTG support
+    mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
+    mkdir /storage/usbdisk 0700 root root
+    symlink /storage/usbdisk /mnt/usbdisk
+    symlink /mnt/usbdisk /usbdisk
+
 on fs
     mount_all ./fstab.x3
+    setprop ro.crypto.fuse_sdcard true
 
     mkdir /data/dontpanic
     chown root system /data/dontpanic
@@ -308,6 +316,10 @@ service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emul
     class late_start
 
 service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+    class late_start
+    disabled
+
+service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/usbdisk /storage/usbdisk
     class late_start
     disabled
 
