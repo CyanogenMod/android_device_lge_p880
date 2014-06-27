@@ -324,6 +324,13 @@ service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/usbdisk
     disabled
 
 on boot
+    write /proc/sys/vm/highmem_is_dirtyable 1
+    write /proc/sys/vm/lowmem_reserve_ratio 16\ 16
+    write /proc/sys/vm/min_free_kbytes 4096
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 51000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 51000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 51000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 51000
     write /sys/class/gpio/export 61
 
     chown system system /sys/devices/platform/gps_gpio/poweron
@@ -347,6 +354,11 @@ on boot
 
     setprop nvcpud.enabled true
     setprop nvcpud.config_refresh_ms -1
+
+   # Configure and enable KSM
+    write /sys/kernel/mm/ksm/pages_to_scan 100
+    write /sys/kernel/mm/ksm/sleep_millisecs 500
+    write /sys/kernel/mm/ksm/run 1
 
     # Torch perms
     chown system camera /sys/devices/platform/tegra-i2c.2/i2c-2/2-0053/torch
