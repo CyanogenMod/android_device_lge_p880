@@ -331,19 +331,26 @@ on boot
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 51000
     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 51000
     write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 51000
-    write /sys/class/gpio/export 61
 
+# GPS init
+    write /sys/class/gpio/export 61
+    write /sys/class/gpio/gpio61/value 0
+    write /sys/class/gpio/gpio61/direction out
+    chown gps system /sys/class/gpio/gpio61/value
+    chmod 0664 /sys/class/gpio/gpio162/value
     chown system system /sys/devices/platform/gps_gpio/poweron
     chown system system /sys/devices/platform/gps_gpio/reset
     chown system system /sys/devices/platform/gps_gpio/eclk
     chown system system /dev/pts17
     mkdir /data/gps
     chmod 770 /data/gps
-    chown system system /data/gps
+    chown gps system /data/gps
     chmod 770 /system/etc/cert/lge.cer
     chown system system /system/etc/cert/lge.cer
     chmod 770 /system/etc/hmconfig.txt
     chown system system /system/etc/hmconfig.txt
+    chown gps system /dev/ttyHS1
+    chmod 0660 /dev/ttyHS1
     chown audio audio /dev/pts29
 
     mkdir /cal/secclk 0770 system system
