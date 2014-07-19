@@ -25,6 +25,7 @@
 /data/nvcam(/.*)?                u:object_r:nvcam_data_files:s0
 
 # sensors
+/dev/accelirq                    u:object_r:sensors_device:s0
 /dev/timerirq                    u:object_r:sensors_device:s0
 
 # calibration
@@ -34,3 +35,4 @@
 /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning  u:object_r:sysfs_writable:s0
 /sys/devices/platform/tspdrv/nforce_timed              u:object_r:sysfs_writable:s0
 /sys/devices/virtual/input/lge_touch/keypad_enable     u:object_r:sysfs_writable:s0
+/sys/class/graphics/fb0/device/smartdimmer/enable      u:object_r:sysfs_writable:s0
