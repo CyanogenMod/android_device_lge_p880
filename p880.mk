@@ -129,7 +129,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := full_p880
 PRODUCT_DEVICE := p880
-PRODUCT_MODEL := LG-P880
+PRODUCT_MODEL := Optimus 4X HD
 PRODUCT_MANUFACTURER := LGE
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)
