@@ -261,11 +261,6 @@ service dhcpcd_wlan0 /system/bin/dhcpcd -aBKAL
     disabled
     oneshot
 
-service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
-    class main
-    disabled
-    oneshot
-
 service iprenew_wlan0 /system/bin/dhcpcd -n
     class main
     disabled
@@ -281,7 +276,22 @@ service iprenew_p2p /system/bin/dhcpcd -n
     disabled
     oneshot
 
+service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot
+
 service iprenew_bt-pan /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_usb0 /system/bin/dhcpcd -ABDKL -f/system/etc/dhcpcd/dhcpcd.conf
+    class main
+    disabled
+    oneshot
+
+service iprenew_usb0 /system/bin/dhcpcd -n
     class main
     disabled
     oneshot

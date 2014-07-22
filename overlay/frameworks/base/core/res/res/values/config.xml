@@ -49,6 +49,9 @@
         <item>"bt-pan"</item>
     </string-array>
 
+    <!-- Regex of wired ethernet ifaces -->
+    <string translatable="false" name="config_ethernet_iface_regex">(eth|usb)\\d</string>
+
     <!-- An Array of "[Connection name],[ConnectivityManager.TYPE_xxxx],
                   [associated radio-type],[priority],[restoral-timer(ms)],[dependencyMet]  -->
     <!-- the 5th element "resore-time" indicates the number of milliseconds to delay
