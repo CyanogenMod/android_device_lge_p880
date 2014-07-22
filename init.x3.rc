@@ -58,9 +58,7 @@ on fs
     chmod 0666 /data/misc/wifi/firmware_path
 
 on boot
-    insmod /system/lib/modules/bthid.ko
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
-# --- BRCM
     mkdir /data/misc/wifi 0775 wifi radio
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/dhcp 0770 dhcp dhcp
@@ -81,11 +79,20 @@ on boot
     chmod 0660 /sys/class/rfkill/rfkill0/type
     chmod 0660 /sys/class/rfkill/rfkill1/state
     chmod 0660 /sys/class/rfkill/rfkill1/type
+    chmod 0660 /sys/class/rfkill/rfkill2/state
+    chmod 0660 /sys/class/rfkill/rfkill2/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/type
-    write /sys/class/rfkill/rfkill0/state 0
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill2/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill2/type
+    restorecon /sys/class/rfkill/rfkill0/state
+    restorecon /sys/class/rfkill/rfkill0/type
+    restorecon /sys/class/rfkill/rfkill1/state
+    restorecon /sys/class/rfkill/rfkill1/type
+    restorecon /sys/class/rfkill/rfkill2/state
+    restorecon /sys/class/rfkill/rfkill2/type
 
 # FactoryTest AT command
     chmod 0664 /sys/devices/platform/bd_address/bdaddr_if
@@ -133,9 +140,9 @@ on boot
     chown system radio /sys/class/power_supply/charger/device/chgcc_ta
 
 # didim
-    chown system system /sys/devices/nvhost/tegradc.0/smartdimmer/enable
-    chown system system /sys/devices/nvhost/tegradc.0/smartdimmer/aggressiveness
-    chown system system /sys/devices/nvhost/tegradc.0/smartdimmer/phase_in_video
+    chown system system /sys/class/graphics/fb0/device/smartdimmer/enable
+    chown system system /sys/class/graphics/fb0/device/smartdimmer/aggressiveness
+    chown system system /sys/class/graphics/fb0/device/smartdimmer/phase_in_adjustments
 
 # power
     chown system system /sys/kernel/tegra_cap/core_cap_level
@@ -194,19 +201,18 @@ on boot
     write /sys/devices/system/cpu/cpufreq/interactive/boost_factor 2
     write /sys/devices/system/cpu/cpufreq/interactive/sustain_load 80
     write /sys/module/cpu_tegra3/parameters/auto_hotplug 1
-    write /sys/module/cpuidle/parameters/lp2_in_idle 1
+    write /sys/module/cpuidle/parameters/lp2_in_idle 0
 
 # Interactive dynamic frequecy mode settings
     write /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load 95
     write /sys/devices/system/cpu/cpufreq/interactive/dynamic_freq_mode 1
     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 20000
+    restorecon /sys/devices/tegradc.0/smartdimmer/aggressiveness
+    restorecon /sys/devices/tegradc.0/smartdimmer/enable
 
 # Power Save for camera preview and recording
     chown media camera /sys/devices/platform/tegra_camera/power_save_preview
     chown media camera /sys/devices/platform/tegra_camera/power_save_rec
-
-# Power management for jpeg decode
-    chown media sdcard_rw /sys/devices/nvavp/jpeg_decode
 
     chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/enablesmpl
     chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/smplcount
@@ -215,6 +221,7 @@ on boot
 
 #LGE_CHANGE_S 20121126, hwansuk.kang@lge.com [data] TCP increase rmem_max value for downlink data throughput
     write /proc/sys/net/core/rmem_max 393213
+    write /proc/sys/net/core/wmem_max 393213
 #LGE_CHANGE_E 20121126, hwansuk.kang@lge.com [data] TCP increase rmem_max value for downlink data throughput
 
 #LGE_CHANGE_S 20120720, hwansuk.kang@lge.com [data] Disable IPv6 for mobile network
@@ -222,10 +229,6 @@ on boot
     write /proc/sys/net/ipv6/conf/rmnet1/disable_ipv6 1
     write /proc/sys/net/ipv6/conf/rmnet2/disable_ipv6 1
 #LGE_CHANGE_E 20120720, hwansuk.kang@lge.com [data] Disable IPv6 for mobile network
-
-# didim
-    chown system system /sys/class/graphics/fb0/device/smartdimmer/enable
-    chown system system /sys/class/graphics/fb0/device/smartdimmer/aggressiveness
 
 #LGE_RIL_START sabina.park@lge.com
 service rawip_rmnet1 /system/bin/init.rmnet 1
@@ -329,10 +332,6 @@ on boot
     write /proc/sys/vm/highmem_is_dirtyable 1
     write /proc/sys/vm/lowmem_reserve_ratio 16\ 16
     write /proc/sys/vm/min_free_kbytes 4096
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 51000
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 51000
-    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 51000
-    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 51000
 
 # GPS init
     write /sys/class/gpio/export 61
@@ -438,14 +437,15 @@ on post-fs-data
     chown root system /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     chown root system /sys/devices/platform/tspdrv/nforce_timed
     chown root system /sys/devices/virtual/input/lge_touch/keypad_enable
+    chown root system /sys/class/graphics/fb0/device/smartdimmer/enable
     chmod 0664 /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     chmod 0664 /sys/devices/platform/tspdrv/nforce_timed
     chmod 0664 /sys/devices/virtual/input/lge_touch/keypad_enable
+    chmod 0664 /sys/class/graphics/fb0/device/smartdimmer/enable
     restorecon /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     restorecon /sys/devices/platform/tspdrv/nforce_timed
-    restorecon /sys/devices/tegradc.0/smartdimmer/aggressiveness
-    restorecon /sys/devices/tegradc.0/smartdimmer/enable
     restorecon /sys/devices/virtual/input/lge_touch/keypad_enable
+    restorecon /sys/class/graphics/fb0/device/smartdimmer/enable
 
 service insmod_rawip /system/bin/init.rawip 1
     user root
