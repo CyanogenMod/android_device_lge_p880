@@ -49,9 +49,6 @@
         <item>"bt-pan"</item>
     </string-array>
 
-    <!-- Regex of wired ethernet ifaces -->
-    <string translatable="false" name="config_ethernet_iface_regex">(eth|usb)\\d</string>
-
     <!-- An Array of "[Connection name],[ConnectivityManager.TYPE_xxxx],
                   [associated radio-type],[priority],[restoral-timer(ms)],[dependencyMet]  -->
     <!-- the 5th element "resore-time" indicates the number of milliseconds to delay
@@ -80,10 +77,6 @@
     <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
 
     <bool name="config_wifi_background_scan_support">true</bool>
-
-    <!-- Device type information conforming to Annex B format in WiFi Direct specification.
-    The default represents a dual-mode smartphone -->
-    <string translatable="false" name="config_wifi_p2p_device_type">1-0050F204-1</string>
 
     <bool name="config_disableMenuKeyInLockScreen">true</bool>
 
