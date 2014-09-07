@@ -170,6 +170,7 @@ on boot
     chown system system /sys/kernel/tegra_cap/core_cap_level
     chown system system /sys/kernel/tegra_cap/core_cap_state
     chown system system /sys/module/cpu_tegra/parameters/cpu_user_cap
+    chown system system /sys/module/cpu_tegra3/parameters/mp_overhead
     chown system system /sys/module/cpu_tegra/parameters/force_disable_edp
     chown system system /sys/module/cpu_tegra/parameters/force_policy_max
     chown system system /sys/module/cpu_tegra/parameters/is_enable_boost_load_shaper
@@ -238,8 +239,26 @@ on boot
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/max_boost
     chown system system /sys/devices/system/cpu/cpufreq/interactive/sustain_load
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/sustain_load
+
+# Misc Settings
+    chown system system /sys/kernel/tegra_cap/cbus_cap_level
+    chown system system /sys/kernel/tegra_cap/cbus_cap_state
+	chown system system /sys/devices/tegradc.0/enable
+	chown system system /sys/devices/tegradc.1/enable
+    chown system system /sys/devices/gr3d/enable_3d_scaling
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     restorecon /sys/devices/tegradc.0/smartdimmer/aggressiveness
     restorecon /sys/devices/tegradc.0/smartdimmer/enable
+
+# nvdps
+    chown system system /sys/class/graphics/fb0/device/nvdps
+
+# USB On The Go - Host Mode
+    chown system system /sys/devices/platform/tegra-otg/enable_host
+
+# Default Read Ahead value for sdcards
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
 
 # Power Save for camera preview and recording
     chown media camera /sys/devices/platform/tegra_camera/power_save_preview
@@ -247,8 +266,6 @@ on boot
 
     chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/enablesmpl
     chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/smplcount
-    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
-    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
 
 #LGE_CHANGE_S 20121126, hwansuk.kang@lge.com [data] TCP increase rmem_max value for downlink data throughput
     write /proc/sys/net/core/rmem_max 393213
@@ -287,12 +304,12 @@ service rmnet2_down /system/bin/init.rmnet-down 2
     disabled
     oneshot
 
-service dhcpcd_wlan0 /system/bin/dhcpcd -aBKAL
-    class core
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+    class main
     disabled
     oneshot
 
-service iprenew_wlan0 /system/bin/dhcpcd -n
+service dhcpcd_wlan0 /system/bin/dhcpcd -aABKL
     class main
     disabled
     oneshot
@@ -302,10 +319,10 @@ service dhcpcd_p2p /system/bin/dhcpcd -aABKL
     disabled
     oneshot
 
-service iprenew_p2p /system/bin/dhcpcd -n
-    class main
-    disabled
-    oneshot
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL -f/system/etc/dhcpcd/dhcpcd.conf
+     class main
+     disabled
+     oneshot
 
 service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
     class main
@@ -313,6 +330,21 @@ service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
     oneshot
 
 service iprenew_bt-pan /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_wlan0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_p2p /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_eth0 /system/bin/dhcpcd -n
     class main
     disabled
     oneshot
