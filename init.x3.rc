@@ -250,6 +250,16 @@ on boot
     restorecon /sys/devices/tegradc.0/smartdimmer/aggressiveness
     restorecon /sys/devices/tegradc.0/smartdimmer/enable
 
+# Give system access to TCP delayed ack and autotuning settings
+    chown system system /sys/kernel/ipv4/tcp_delack_seg
+    chown system system /sys/kernel/ipv4/tcp_use_userconfig
+    chown system system /sys/kernel/ipv4/tcp_wmem_min
+    chown system system /sys/kernel/ipv4/tcp_wmem_def
+    chown system system /sys/kernel/ipv4/tcp_wmem_max
+    chown system system /sys/kernel/ipv4/tcp_rmem_min
+    chown system system /sys/kernel/ipv4/tcp_rmem_def
+    chown system system /sys/kernel/ipv4/tcp_rmem_max
+
 # nvdps
     chown system system /sys/class/graphics/fb0/device/nvdps
 
