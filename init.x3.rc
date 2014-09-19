@@ -250,9 +250,7 @@ on boot
     restorecon /sys/devices/tegradc.0/smartdimmer/aggressiveness
     restorecon /sys/devices/tegradc.0/smartdimmer/enable
 
-# Give system access to TCP delayed ack and autotuning settings
-    chown system system /sys/kernel/ipv4/tcp_delack_seg
-    chown system system /sys/kernel/ipv4/tcp_use_userconfig
+# Give system access to TCP autotuning settings
     chown system system /sys/kernel/ipv4/tcp_wmem_min
     chown system system /sys/kernel/ipv4/tcp_wmem_def
     chown system system /sys/kernel/ipv4/tcp_wmem_max
@@ -435,11 +433,6 @@ on boot
 
     setprop nvcpud.enabled true
     setprop nvcpud.config_refresh_ms -1
-
-   # Configure and enable KSM
-    write /sys/kernel/mm/ksm/pages_to_scan 100
-    write /sys/kernel/mm/ksm/sleep_millisecs 500
-    write /sys/kernel/mm/ksm/run 1
 
     # Torch perms
     chown system camera /sys/devices/platform/tegra-i2c.2/i2c-2/2-0053/torch
