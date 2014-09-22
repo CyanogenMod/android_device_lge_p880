@@ -280,38 +280,6 @@ on boot
     write /proc/sys/net/core/wmem_max 393213
 #LGE_CHANGE_E 20121126, hwansuk.kang@lge.com [data] TCP increase rmem_max value for downlink data throughput
 
-#LGE_CHANGE_S 20120720, hwansuk.kang@lge.com [data] Disable IPv6 for mobile network
-    write /proc/sys/net/ipv6/conf/rmnet0/disable_ipv6 1
-    write /proc/sys/net/ipv6/conf/rmnet1/disable_ipv6 1
-    write /proc/sys/net/ipv6/conf/rmnet2/disable_ipv6 1
-#LGE_CHANGE_E 20120720, hwansuk.kang@lge.com [data] Disable IPv6 for mobile network
-
-#LGE_RIL_START sabina.park@lge.com
-service rawip_rmnet1 /system/bin/init.rmnet 1
-    user root
-    group radio cache inet misc
-    disabled
-    oneshot
-
-service rawip_rmnet2 /system/bin/init.rmnet 2
-    user root
-    group radio cache inet misc
-    disabled
-    oneshot
-
-# used to down HSI interfaces on RIL Recovery
-service rmnet1_down /system/bin/init.rmnet-down 1
-    user root
-    group radio cache inet misc
-    disabled
-    oneshot
-
-service rmnet2_down /system/bin/init.rmnet-down 2
-    user root
-    group radio cache inet misc
-    disabled
-    oneshot
-
 service dhcpcd_p2p /system/bin/dhcpcd -aABKL
     class main
     disabled

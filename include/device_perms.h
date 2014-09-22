@@ -7,10 +7,6 @@ struct {
 } control_perms[] = {
     { "dumpstate",AID_SHELL, AID_LOG },
     { "ril-daemon",AID_RADIO, AID_RADIO },
-    { "rawip_rmnet1",AID_RADIO, AID_RADIO },
-    { "rawip_rmnet2",AID_RADIO, AID_RADIO },
-    { "rmnet1_down", AID_RADIO, AID_RADIO },
-    { "rmnet2_down", AID_RADIO, AID_RADIO },
     { "insmod_rawip", AID_RADIO, AID_RADIO },
     { "rmmod_rawip", AID_RADIO, AID_RADIO },
      {NULL, 0, 0 }
