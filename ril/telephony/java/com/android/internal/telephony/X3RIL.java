@@ -109,6 +109,7 @@ public class X3RIL extends RIL implements CommandsInterface {
     static final int RIL_UNSOL_LGE_RESTART_RILD = 1055;
     static final int RIL_UNSOL_LGE_RESPONSE_PS_SIGNALING_STATUS = 1058;
     static final int RIL_UNSOL_LGE_SELECTED_SPEECH_CODEC = 1074;
+    static final int RIL_UNSOL_LGE_SIM_STATE_CHANGED = 1060;
     static final int RIL_UNSOL_LGE_SIM_STATE_CHANGED_NEW = 1061;
     static final int RIL_UNSOL_LGE_FACTORY_READY = 1080;
 
@@ -144,6 +145,7 @@ public class X3RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_LGE_BATTERY_LEVEL_UPDATE: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_XCALLSTAT: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_SELECTED_SPEECH_CODEC: ret =  responseVoid(p); break;
+            case RIL_UNSOL_LGE_SIM_STATE_CHANGED:
             case RIL_UNSOL_LGE_SIM_STATE_CHANGED_NEW: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_RESTART_RILD: ret =  responseVoid(p); break;
             case RIL_UNSOL_LGE_RESPONSE_PS_SIGNALING_STATUS: ret = responseVoid(p); break;
@@ -193,6 +195,7 @@ public class X3RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_LGE_SELECTED_SPEECH_CODEC:
                 setSpeechCodec(ret);
                 break;
+            case RIL_UNSOL_LGE_SIM_STATE_CHANGED:
             case RIL_UNSOL_LGE_SIM_STATE_CHANGED_NEW:
                 if (RILJ_LOGD) unsljLog(response);
 
