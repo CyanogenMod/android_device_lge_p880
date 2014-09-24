@@ -16,6 +16,7 @@
 
 package org.cyanogenmod.hardware;
 
+import java.io.File;
 import org.cyanogenmod.hardware.util.FileUtils;
 
 /**
@@ -29,7 +30,8 @@ public class AdaptiveBacklight {
             "/sys/class/graphics/fb0/device/smartdimmer/enable";
 
     public static boolean isSupported() {
-        return true;
+        File f = new File(SMARTDIMMER_SYSFS);
+        return f.exists();
     }
 
     public static boolean isEnabled() {

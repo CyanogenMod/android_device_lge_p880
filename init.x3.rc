@@ -468,14 +468,17 @@ on post-fs-data
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
 
 # Hardware tunable perms
+    chown root system /sys/devices/platform/spi_tegra.4/spi4.2/gamma_saved
     chown root system /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     chown root system /sys/devices/platform/tspdrv/nforce_timed
     chown root system /sys/devices/virtual/input/lge_touch/keypad_enable
     chown root system /sys/class/graphics/fb0/device/smartdimmer/enable
+    chmod 0664 /sys/devices/platform/spi_tegra.4/spi4.2/gamma_saved
     chmod 0664 /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     chmod 0664 /sys/devices/platform/tspdrv/nforce_timed
     chmod 0664 /sys/devices/virtual/input/lge_touch/keypad_enable
     chmod 0664 /sys/class/graphics/fb0/device/smartdimmer/enable
+    restorecon /sys/devices/platform/spi_tegra.4/spi4.2/gamma_saved
     restorecon /sys/devices/platform/spi_tegra.4/spi4.2/gamma_tuning
     restorecon /sys/devices/platform/tspdrv/nforce_timed
     restorecon /sys/devices/virtual/input/lge_touch/keypad_enable
