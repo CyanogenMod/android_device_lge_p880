@@ -275,11 +275,6 @@ on boot
     chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/enablesmpl
     chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/smplcount
 
-#LGE_CHANGE_S 20121126, hwansuk.kang@lge.com [data] TCP increase rmem_max value for downlink data throughput
-    write /proc/sys/net/core/rmem_max 393213
-    write /proc/sys/net/core/wmem_max 393213
-#LGE_CHANGE_E 20121126, hwansuk.kang@lge.com [data] TCP increase rmem_max value for downlink data throughput
-
 service dhcpcd_p2p /system/bin/dhcpcd -aABKL
     class main
     disabled
@@ -456,16 +451,24 @@ on post-fs-data
     mkdir /data/lgdrm 0770 system media
     setprop vold.post_fs_data_done 1
 
-    # Set buffer sizes from stock (lower readmax) 
-    setprop net.tcp.buffersize.default 4096,87380,393216,4096,16384,110208
+    # Define TCP buffer sizes for various networks
+    # ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+    setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
     setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
     setprop net.tcp.buffersize.lte     524288,1048576,2097152,262144,524288,1048576
-    setprop net.tcp.buffersize.umts    4094,87380,393216,4096,16384,110208
-    setprop net.tcp.buffersize.hspa    4094,87380,393216,4096,16384,110208
-    setprop net.tcp.buffersize.hsupa   4094,87380,393216,4096,16384,110208
-    setprop net.tcp.buffersize.hsdpa   4094,87380,393216,4096,16384,110208
+    setprop net.tcp.buffersize.umts    4094,87380,110208,4096,16384,110208
+    setprop net.tcp.buffersize.hspa    4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.hsupa   4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.hsdpa   4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.hspap   4094,87380,1220608,4096,16384,1220608
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
+    setprop net.tcp.buffersize.evdo    4094,87380,262144,4096,16384,262144
+
+    # Assign TCP buffer thresholds to be ceiling value of technology maximums
+    # Increased technology maximums should be reflected here.
+    write /proc/sys/net/core/rmem_max  2097152
+    write /proc/sys/net/core/wmem_max  2097152
 
 # Hardware tunable perms
     chown root system /sys/devices/platform/spi_tegra.4/spi4.2/gamma_saved
