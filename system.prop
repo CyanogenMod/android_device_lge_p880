@@ -2,11 +2,10 @@
 # system.prop for p880
 #
 
-ro.sf.lcd_density=320
-
 rild.libpath=/system/lib/lge-ril.so
 rild.libargs=-d /dev/ttyACM0
 ro.telephony.ril_class=X3RIL
+
 # Disable LTE
 telephony.lteOnGsmDevice=0
 ro.telephony.default_network=3

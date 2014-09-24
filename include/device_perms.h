@@ -49,6 +49,7 @@ struct {
     { "persist.service.", AID_SYSTEM,   0 },
     { "persist.service.", AID_RADIO,    0 },
     { "persist.security.",AID_SYSTEM,   0 },
+    { "sf.lcd_density", AID_SYSTEM, 0 },
     { "net.pdp",          AID_RADIO,    AID_RADIO },
     { "net.pdp1",         AID_RADIO,    AID_RADIO },
     { "net.pdp2",         AID_RADIO,    AID_RADIO },
