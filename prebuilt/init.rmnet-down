@@ -1,0 +1,19 @@
+#!/system/bin/sh
+
+cid=$1
+ifaceid=$(($cid-1))
+RMNET_IP=`/system/bin/getprop net.pdp$cid.ip`
+IFNAME=`/system/bin/getprop net.pdp$cid.name`
+
+/system/bin/log -t rmnet "configuring $IFNAME: ip address - $RMNET_IP [UP] => [DOWN]";
+
+/system/bin/ifconfig $IFNAME down || {
+    /system/bin/log -t rmnet "ERROR: ifconfig unable to down $IFNAME interface";
+    /system/bin/setprop "net.pdp$cid.svc_down_done" "0";
+    exit 1;
+}
+
+/system/bin/log -t rmnet "$IFNAME is down successfully";
+/system/bin/setprop "net.$IFNAME.local-ip" ""
+/system/bin/setprop "net.$IFNAME.remote-ip" ""
+/system/bin/setprop "net.pdp$cid.svc_down_done" "1"

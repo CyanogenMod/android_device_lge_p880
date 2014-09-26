@@ -61,6 +61,7 @@ on early-boot
     restorecon /sys/devices/system/cpu/cpufreq/interactive/timer_rate
 
 on fs
+    mkdir /mnt/modem 0770 radio system
     mount_all ./fstab.x3
     setprop ro.crypto.fuse_sdcard true
 
@@ -126,10 +127,14 @@ on boot
     chown bluetooth net_bt_stack /proc/bluetooth/sleep/lpm
     chown bluetooth net_bt_stack /proc/bluetooth/sleep/btwrite
 
+# audio
+    chmod 0664 /sys/power/suspend/mode
+    chown system audio /sys/power/suspend/mode
+
 # NFC
     setprop ro.nfc.port "I2C"
     chmod 0660 /dev/pn544
-    chown nfc nfc /dev/pn544
+    chown nfc system /dev/pn544
 
 # backlight
     chown system radio /sys/class/leds/lcd-backlight/brightness
@@ -217,6 +222,25 @@ on boot
     chown system system /sys/bus/i2c/drivers/apds990x/0-0039/ps_cal_result
     chmod 0660 /sys/bus/i2c/drivers/apds990x/0-0039/ps_cal_result
 
+# BB remote file system
+    mkdir /data/rfs
+    mkdir /data/rfs/data
+    mkdir /data/rfs/data/modem
+    mkdir /data/rfs/data/debug
+    chown radio system /data/rfs/data
+    chown radio system /data/rfs/data/modem
+    chown radio log /data/rfs/data/debug
+    symlink /system/vendor/firmware/data/config /data/rfs/data/config
+    symlink /system/vendor/firmware/app /data/rfs/app
+    symlink /mnt/modem/data/factory /data/rfs/data/factory
+
+# BB mapping symbolic name to the logging ttyACM port
+    symlink /dev/ttyACM0 /dev/log_modem
+    chmod 775 /data/rfs/data/debug
+
+# GPIO BB access for user radio
+    chown radio system /sys/class/gpio/gpio222/value
+
 # Power management settings
     write /sys/module/cpu_tegra3/parameters/no_lp 0
     #write /sys/module/tegra3_emc/parameters/emc_enable 0
@@ -243,8 +267,8 @@ on boot
 # Misc Settings
     chown system system /sys/kernel/tegra_cap/cbus_cap_level
     chown system system /sys/kernel/tegra_cap/cbus_cap_state
-	chown system system /sys/devices/tegradc.0/enable
-	chown system system /sys/devices/tegradc.1/enable
+    chown system system /sys/devices/tegradc.0/enable
+    chown system system /sys/devices/tegradc.1/enable
     chown system system /sys/devices/gr3d/enable_3d_scaling
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     restorecon /sys/devices/tegradc.0/smartdimmer/aggressiveness
@@ -274,6 +298,31 @@ on boot
 
     chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/enablesmpl
     chown system radio /sys/devices/platform/tegra-i2c.4/i2c-4/4-001c/max77663-rtc.0/smplcount
+
+service rawip_rmnet1 /system/bin/init.rmnet 1
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
+
+service rawip_rmnet2 /system/bin/init.rmnet 2
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
+
+# used to down HSI interfaces on RIL Recovery
+    service rmnet1_down /system/bin/init.rmnet-down 1
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
+
+service rmnet2_down /system/bin/init.rmnet-down 2
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
 
 service dhcpcd_p2p /system/bin/dhcpcd -aABKL
     class main
@@ -319,6 +368,11 @@ service iprenew_eth0 /system/bin/dhcpcd -n
     class main
     disabled
     oneshot
+
+# Adjust socket buffer to enlarge TCP receive window for high bandwidth
+# but only if ro.data.large_tcp_window_size property is set.
+on property:ro.data.large_tcp_window_size=true
+    write /proc/sys/net/ipv4/tcp_adv_win_scale 2
 
 service p2p_supplicant /system/bin/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
@@ -380,8 +434,8 @@ on boot
     mkdir /data/gps
     chmod 770 /data/gps
     chown gps system /data/gps
-    chmod 770 /system/etc/cert/lge.cer
-    chown system system /system/etc/cert/lge.cer
+    chmod 770 /system/etc/SuplRootCert
+    chown system system /system/etc/SuplRootCert
     chmod 770 /system/etc/hmconfig.txt
     chown system system /system/etc/hmconfig.txt
     chown gps system /dev/ttyHS1
@@ -419,6 +473,8 @@ service charger /charger
 #    group system
 
 on boot
+    chown system system /sys/class/power_supply/battery/temp_control
+    chmod 0664 /sys/class/power_supply/battery/temp_control
     chown system system /sys/power/lge_logstart
     chmod 0660 /sys/power/lge_logstart
 
@@ -450,6 +506,24 @@ on post-fs-data
     # create directory for lgdrm
     mkdir /data/lgdrm 0770 system media
     setprop vold.post_fs_data_done 1
+
+# NETWORK: NAT setting
+# To prevent out of WINDOW ACK from making
+# connection tracking to treat them as INVALID packet
+    write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
+
+# Wifi: Disable the IPv6 of p2p0 interface
+    write /proc/sys/net/ipv6/conf/p2p0/disable_ipv6 1
+
+# Flash storage isn't a good entropy source, and only causes locking
+# overhead in the kernel. Turn it off.
+    write /sys/block/mmcblk0/queue/add_random 0
+
+#LGE_CHANGE_S 20120720, hwansuk.kang@lge.com [data] Disable IPv6 for mobile network
+	write /proc/sys/net/ipv6/conf/rmnet0/disable_ipv6 1
+	write /proc/sys/net/ipv6/conf/rment1/disable_ipv6 1
+	write /proc/sys/net/ipv6/conf/rmnet2/disable_ipv6 1
+#LGE_CHANGE_E 20120720, hwansuk.kang@lge.com [data] Disable IPv6 for mobile network
 
     # Define TCP buffer sizes for various networks
     # ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
