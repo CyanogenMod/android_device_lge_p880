@@ -39,7 +39,7 @@ PRODUCT_COPY_FILES += \
 
 ## GPS
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/SuplRootCert:system/etc/SuplRootCert \
+    $(LOCAL_PATH)/configs/lge.cer:system/etc/cert/lge.cer \
     $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf \
     $(LOCAL_PATH)/configs/hmconfig.txt:system/etc/hmconfig.txt
 

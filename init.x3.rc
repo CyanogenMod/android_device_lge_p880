@@ -434,8 +434,8 @@ on boot
     mkdir /data/gps
     chmod 770 /data/gps
     chown gps system /data/gps
-    chmod 770 /system/etc/SuplRootCert
-    chown system system /system/etc/SuplRootCert
+    chmod 770 /system/etc/cert/lge.cer
+    chown system system /system/etc/cert/lge.cer
     chmod 770 /system/etc/hmconfig.txt
     chown system system /system/etc/hmconfig.txt
     chown gps system /dev/ttyHS1
