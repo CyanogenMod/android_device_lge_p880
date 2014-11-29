@@ -1,21 +1,32 @@
-allow { surfaceflinger system system_app } { knv_device nvhost_writable_device }:chr_file rw_file_perms;
+allow surfaceflinger { knv_device }:chr_file rw_file_perms;
+allow surfaceflinger { sysfs_devices_system_cpu sysfs_devices_tegradc }:file rw_file_perms;
+allow surfaceflinger sysfs_devices_tegradc:dir r_dir_perms;
+allow surfaceflinger sysfs_devices_tegradc:lnk_file { open getattr read };
+allow surfaceflinger sysfs_devices_system_cpu:dir w_dir_perms;
+# Kernel bug for Linux < 3.3: sysfs inodes can lose their security context
+# and revert to the base sysfs type.
+allow surfaceflinger sysfs:file write;
 
-allow surfaceflinger { sysfs_devices_tegradc }:file w_file_perms;
-allow surfaceflinger tee_device:chr_file rw_file_perms;
+allow mediaserver { gpu_device nvhost_device }:chr_file rw_file_perms;
+# ?
+allow mediaserver debugfs:file r_file_perms;
+# ?
+allow mediaserver system_server:unix_stream_socket rw_stream_socket_perms;
+# ?
+allow mediaserver block_device:dir search;
+# ?
+allow mediaserver shell_exec:file rx_file_perms;
 
-allow mediaserver { nvhost_writable_device nv_device nvhost_device }:chr_file rw_file_perms;
-allow mediaserver nvcam_data_files:file rw_file_perms;
-
-allow appdomain { nvhost_writable_device nv_device }:chr_file rw_file_perms;
+allow system_app knv_device:chr_file rw_file_perms;
 
 ## For "nvram", mmcblk0p7
 allow rild radio_device:blk_file rw_file_perms;
 allow rild radio_data_file:file { rw_file_perms setattr };
 
 ## /cal/* files
-allow system calibration_data_file:file rw_file_perms;
+allow system_server calibration_data_file:file rw_file_perms;
 allow tee calibration_data_file:file rw_file_perms;
 allow tee calibration_data_file:dir rw_file_perms;
 allow tee calibration_data_file:dir search;
 
-allow zygote { video_device console_device nvhost_writable_device knv_device }:chr_file rw_file_perms;
+allow zygote { video_device console_device gpu_device knv_device }:chr_file rw_file_perms;

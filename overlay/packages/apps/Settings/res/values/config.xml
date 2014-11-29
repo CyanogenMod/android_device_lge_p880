@@ -18,7 +18,7 @@
 
     <!-- Volume Rocker Wake Support. Some devices do not support (PMU) this.
          Setting to false will disable Volume Rocker Wake support -->
-    <bool name="config_show_volumeRockerWake">true</bool>
+    <!-- <bool name="config_show_volumeRockerWake">true</bool> -->
 
     <!-- Processor menu, freq cap files -->
     <string name="max_cpu_freq_file">/sys/module/cpu_tegra/parameters/cpu_user_cap</string>

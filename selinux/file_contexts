@@ -1,9 +1,11 @@
+/dev/diag                         u:object_r:diag_device:s0
 /dev/knvmap                       u:object_r:knv_device:s0
-/dev/tegra-throughput             u:object_r:nvhost_writable_device:s0
+/dev/tegra-throughput             u:object_r:gpu_device:s0
 /dev/nvhost.*                     u:object_r:nvhost_device:s0
-/dev/nvhost-ctrl                  u:object_r:nvhost_writable_device:s0
-/dev/nvhost-gr2d                  u:object_r:nvhost_writable_device:s0
-/dev/nvhost-gr3d                  u:object_r:nvhost_writable_device:s0
+/dev/nvhost-ctrl                  u:object_r:gpu_device:s0
+/dev/nvhost-gr2d                  u:object_r:gpu_device:s0
+/dev/nvhost-gr3d                  u:object_r:gpu_device:s0
+/dev/nvmap                        u:object_r:gpu_device:s0
 /dev/nvhdcp.                      u:object_r:video_device:s0
 
 /sys/devices/tegradc\.0(/.*)?                u:object_r:sysfs_devices_tegradc:s0
@@ -17,8 +19,10 @@
 /dev/pts[0-9]*                   u:object_r:radio_device:s0
 /dev/pts17                       u:object_r:gps_device:s0
 /dev/ttyHS1                      u:object_r:gps_device:s0
+/dev/ttyHS2                      u:object_r:hci_attach_dev:s0
 
 # camera
+/dev/tegra_camera                u:object_r:camera_device:s0
 /dev/lm3559                      u:object_r:camera_device:s0
 /dev/imx111                      u:object_r:camera_device:s0
 /dev/dw9714                      u:object_r:camera_device:s0
@@ -36,3 +40,5 @@
 /sys/devices/platform/tspdrv/nforce_timed              u:object_r:sysfs_writable:s0
 /sys/devices/virtual/input/lge_touch/keypad_enable     u:object_r:sysfs_writable:s0
 /sys/class/graphics/fb0/device/smartdimmer/enable      u:object_r:sysfs_writable:s0
+/sys/devices/platform/lbee9qmb-rfkill.0/rfkill/rfkill0/state   --  u:object_r:sysfs_bluetooth_writable:s0
+/sys/devices/platform/lbee9qmb-rfkill.0/rfkill/rfkill0/type    --  u:object_r:sysfs_bluetooth_writable:s0
