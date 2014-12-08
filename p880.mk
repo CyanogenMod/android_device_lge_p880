@@ -1,6 +1,6 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
-$(call inherit-product-if-exists, vendor/lge/p880/p880-vendor.mk)
+$(call inherit-product, vendor/lge/p880/p880-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/lge/p880/overlay
 
@@ -148,4 +148,4 @@ PRODUCT_DEVICE := p880
 PRODUCT_MODEL := Optimus-4XHD
 PRODUCT_MANUFACTURER := LGE
 
-$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)
+$(call inherit-product, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)
