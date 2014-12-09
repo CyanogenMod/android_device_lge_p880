@@ -17,6 +17,9 @@ persist.sys.usb.config=mtp,adb
 debug.nfc.fw_download=true
 debug.nfc.se=false
 
+# Media
+media.stagefright.use-awesome=true
+
 wifi.interface=wlan0
 
 ro.bt.bdaddr_path=/sys/devices/platform/bd_address/bdaddr_if
