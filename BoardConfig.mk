@@ -35,9 +35,6 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 4096
 BOARD_HAS_LARGE_FILESYSTEM := true
 
-# Media
-TARGET_NO_ADAPTIVE_PLAYBACK := true
-
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
 
@@ -96,13 +93,13 @@ BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/lge/p880/recovery-keys.c
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_BATTERY_DEVICE_NAME := battery
 
-BOARD_SEPOLICY_DIRS := \
-    device/lge/p880/selinux
+#BOARD_SEPOLICY_DIRS := \
+#    device/lge/p880/selinux
 
-BOARD_SEPOLICY_UNION += \
-    file_contexts \
-    file.te \
-    device.te \
-    domain.te
+#BOARD_SEPOLICY_UNION += \
+#    file_contexts \
+#    file.te \
+#    device.te \
+#    domain.te
 
 BOARD_HARDWARE_CLASS := device/lge/p880/cmhw/
