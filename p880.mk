@@ -110,9 +110,9 @@ PRODUCT_PACKAGES += \
     charger_res_images
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sf.override_null_lcd_density = 1 \
+    persist.sys.ui.hw=true \
     wifi.interface=wlan0 \
-    mobiledata.interfaces=pdp0,gprs,ppp0,rmnet0,rmnet1 \
+    mobiledata.interfaces=rmnet0,rmnet1 \
     debug.hwui.render_dirty_regions=false \
     ro.telephony.ril_class=X3RIL
 
@@ -137,10 +137,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/init.rmnet:system/bin/init.rmnet \
     $(LOCAL_PATH)/prebuilt/init.rmnet-down:system/bin/init.rmnet-down \
     $(LOCAL_PATH)/prebuilt/init.rawip:system/bin/init.rawip
-
-# For SELinux
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/51selinux:system/etc/init.d/51selinux
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := full_p880

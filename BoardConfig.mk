@@ -4,22 +4,36 @@
 # Target arch settings
 TARGET_ARCH := arm
 TARGET_NO_BOOTLOADER := true
-TARGET_BOARD_PLATFORM := tegra3
+TARGET_BOARD_PLATFORM := tegra
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := cortex-a9
 TARGET_ARCH_VARIANT_CPU := $(TARGET_CPU_VARIANT)
 
-# Board nameing
+# Build Optimizations
+ARCH_ARM_HAVE_TLS_REGISTER := true
+ARCH_ARM_HAVE_32_BYTE_CACHE_LINES := true
+ARCH_ARM_USE_NON_NEON_MEMCPY := true
+
+# Avoid the generation of ldrcc instructions
+NEED_WORKAROUND_CORTEX_A9_745320 := true
+
+# Skip droiddoc build to save build time
+BOARD_SKIP_ANDROID_DOC_BUILD := true
+
+# Enable WEBGL in WebKit
+ENABLE_WEBGL := true
+
+# Board naming
 TARGET_NO_RADIOIMAGE := true
 TARGET_BOOTLOADER_BOARD_NAME := p880
 
 # Lollipop Changes
-TARGET_USES_LOGD := false
+#TARGET_USES_LOGD := false
 MALLOC_IMPL := dlmalloc
 BOARD_USES_LEGACY_MMAP := true
-BOARD_HAVE_PIXEL_FORMAT_INFO := true
+#BOARD_HAVE_PIXEL_FORMAT_INFO := true
 
 BOARD_KERNEL_CMDLINE := androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x10000000
@@ -36,7 +50,7 @@ BOARD_FLASH_BLOCK_SIZE := 4096
 BOARD_HAS_LARGE_FILESYSTEM := true
 
 # Include an expanded selection of fonts
-EXTENDED_FONT_FOOTPRINT := true
+#EXTENDED_FONT_FOOTPRINT := true
 
 TARGET_RECOVERY_PRE_COMMAND := "/system/bin/setup-recovery"
 
@@ -55,7 +69,7 @@ BOARD_EGL_CFG := device/lge/p880/egl.cfg
 BOARD_USE_MHEAP_SCREENSHOT := true
 BOARD_EGL_WORKAROUND_BUG_10194508 := true
 TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
-BOARD_EGL_SKIP_FIRST_DEQUEUE := true
+#BOARD_EGL_SKIP_FIRST_DEQUEUE := true
 
 # Wifi related defines
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
@@ -92,14 +106,5 @@ BOARD_CUSTOM_GRAPHICS := ../../../device/lge/p880/recovery-gfx.c
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/lge/p880/recovery-keys.c
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_BATTERY_DEVICE_NAME := battery
-
-#BOARD_SEPOLICY_DIRS := \
-#    device/lge/p880/selinux
-
-#BOARD_SEPOLICY_UNION += \
-#    file_contexts \
-#    file.te \
-#    device.te \
-#    domain.te
 
 BOARD_HARDWARE_CLASS := device/lge/p880/cmhw/

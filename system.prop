@@ -2,6 +2,8 @@
 # system.prop for p880
 #
 
+ro.sf.lcd_density=320
+
 rild.libpath=/system/lib/lge-ril.so
 rild.libargs=-d /dev/ttyACM0
 
