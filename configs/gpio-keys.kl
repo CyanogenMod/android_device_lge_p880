@@ -1,3 +1,10 @@
 key 116   POWER
 key 115   VOLUME_UP
 key 114   VOLUME_DOWN
+key 139   MENU    VIRTUAL
+key 102   HOME    VIRTUAL
+key 158   BACK    VIRTUAL
+# Add vibration capability on
+key 61   CALL    VIRTUAL
+key 62   ENDCALL    VIRTUAL
+key 217   SEARCH    VIRTUAL

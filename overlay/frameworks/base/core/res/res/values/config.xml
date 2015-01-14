@@ -177,8 +177,9 @@
 
     <bool name="config_enableLockScreenTranslucentDecor">true</bool>
 
+    <!-- There's a bug causing the ColorFade animation not to work with our GPU -->
     <!-- If this is true, the screen will fade off. -->
-    <bool name="config_animateScreenLights">false</bool>
+    <bool name="config_animateScreenLights">true</bool>
 
     <!-- Whether WiFi display is supported by this device.
          There are many prerequisites for this feature to work correctly.
