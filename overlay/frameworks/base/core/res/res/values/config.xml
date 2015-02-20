@@ -25,7 +25,7 @@
     <string name="config_datause_iface">rmnet0</string>
 
     <string-array translatable="false" name="config_tether_usb_regexs">
-    <item>"rndis0"</item>
+        <item>"rndis0"</item>
     </string-array>
 
     <string-array translatable="false" name="config_tether_wifi_regexs">
@@ -34,7 +34,7 @@
 
     <!-- Array of ConnectivityManager.TYPE_xxxx values allowable for tethering -->
     <!-- Common options are [1, 4] for TYPE_WIFI and TYPE_MOBILE_DUN or
-                      <!== [0,1,5,7] for TYPE_MOBILE, TYPE_WIFI, TYPE_MOBILE_HIPRI and TYPE_BLUETOOTH -->
+    <!== [0,1,5,7] for TYPE_MOBILE, TYPE_WIFI, TYPE_MOBILE_HIPRI and TYPE_BLUETOOTH -->
     <integer-array translatable="false" name="config_tether_upstream_types">
         <item>0</item>
         <item>1</item>
@@ -42,17 +42,20 @@
         <item>7</item>
     </integer-array>
 
+    <!-- If this is true, the screen will come on when you unplug usb/power/whatever. -->
+    <bool name="config_unplugTurnsOnScreen">true</bool>	
+	
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
-                  bluetooth interfaces.  If the device doesn't want to support tethering over bluetooth this
+         bluetooth interfaces.  If the device doesn't want to support tethering over bluetooth this
          should be empty. -->
     <string-array translatable="false" name="config_tether_bluetooth_regexs">
-        <item>"bt-pan"</item>
+        <item>bt-pan</item>
     </string-array>
 
     <!-- An Array of "[Connection name],[ConnectivityManager.TYPE_xxxx],
-                  [associated radio-type],[priority],[restoral-timer(ms)],[dependencyMet]  -->
+         [associated radio-type],[priority],[restoral-timer(ms)],[dependencyMet]  -->
     <!-- the 5th element "resore-time" indicates the number of milliseconds to delay
-                  before automatically restore the default connection.  Set -1 if the connection
+         before automatically restore the default connection.  Set -1 if the connection
          does not require auto-restore. -->
     <!-- the 6th element indicates boot-time dependency-met value. -->
     <string-array translatable="false" name="networkAttributes">
@@ -60,13 +63,14 @@
         <item>"mobile,0,0,0,-1,true"</item>
         <item>"mobile_mms,2,0,2,60000,true"</item>
         <item>"mobile_supl,3,0,2,60000,true"</item>
+        <item>"mobile_dun,4,0,3,60000,true"</item>
         <item>"mobile_hipri,5,0,3,60000,true"</item>
         <item>"mobile_bluetooth,7,7,1,-1,true"</item>
         <item>"wifi_p2p,13,1,0,-1,true"</item>
     </string-array>
 
     <!-- An Array of "[ConnectivityManager connectionType],
-                  [# simultaneous connection types]"  -->
+         [# simultaneous connection types]"  -->
     <string-array translatable="false" name="radioAttributes">
         <item>"1,1"</item>
         <item>"0,1"</item>
@@ -76,10 +80,11 @@
 
     <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
 
-    <!-- Regex of wired ethernet ifaces -->
-    <string translatable="false" name="config_ethernet_iface_regex">(eth|usb)\\d</string>
-
     <bool name="config_wifi_background_scan_support">true</bool>
+
+    <!-- Device type information conforming to Annex B format in WiFi Direct specification.
+    The default represents a dual-mode smartphone -->
+    <string translatable="false" name="config_wifi_p2p_device_type">1-0050F204-1</string>
 
     <bool name="config_disableMenuKeyInLockScreen">true</bool>
 
@@ -175,11 +180,45 @@
     <!-- Boolean indicating if current platform supports BLE peripheral mode -->
     <bool name="config_bluetooth_le_peripheral_mode_supported">true</bool>
 
+    <!-- Hardware 'face' keys present on the device, stored as a bit field.
+         This integer should equal the sum of the corresponding value for each
+         of the following keys present:
+             1 - Home
+             2 - Back
+             4 - Menu
+             8 - Assistant (search)
+            16 - App switch
+            32 - Camera
+            64 - Volume rocker
+         For example, a device with Home, Back and Menu keys would set this
+         config to 7. -->
+    <integer name="config_deviceHardwareKeys">71</integer>
+
+    <!-- Hardware keys present on the device with the ability to wake, stored as a bit field.
+         This integer should equal the sum of the corresponding value for each
+         of the following keys present:
+             1 - Home
+             2 - Back
+             4 - Menu
+             8 - Assistant (search)
+            16 - App switch
+            32 - Camera
+            64 - Volume rocker
+         For example, a device with Home, Back and Menu keys would set this
+         config to 7. -->
+    <integer name="config_deviceHardwareWakeKeys">71</integer>
+
+    <!--  Maximum number of supported users -->
+    <integer name="config_multiuserMaximumUsers">4</integer>
+
+    <!-- Whether UI for multi user should be shown -->
+    <bool name="config_enableMultiUserUI">true</bool>
+
+    <!-- Enable lockscreen translucent decor by default -->
     <bool name="config_enableLockScreenTranslucentDecor">true</bool>
 
-    <!-- There's a bug causing the ColorFade animation not to work with our GPU -->
     <!-- If this is true, the screen will fade off. -->
-    <bool name="config_animateScreenLights">true</bool>
+    <bool name="config_animateScreenLights">false</bool>
 
     <!-- Whether WiFi display is supported by this device.
          There are many prerequisites for this feature to work correctly.
@@ -195,34 +234,34 @@
     -->
     <bool name="config_enableWifiDisplay">true</bool>
 
+    <!-- Device supports LED flashlight -->
+    <!--bool name="config_enableTorch">true</bool-->
+
     <!-- Indicate whether the SD card is accessible without removing the battery. -->
     <bool name="config_batterySdCardAccessibility">true</bool>
 
-    <!-- Software blur is too slow on this device -->
-    <bool name="config_sf_slowBlur">true</bool>
+    <!-- Configure mobile tcp buffer sizes in the form:
+    rat-name:rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max
+    If no value is found for the rat-name in use, the system default will be applied.
+    -->
+    <string-array name="config_mobile_tcp_buffers">
+    <item>edge:4093,26280,704512,4096,16384,110208</item>
+    <item>gprs:4092,8760,704512,4096,8760,110208</item>
+    <item>umts:4094,87380,704512,4096,16384,110208</item>
+    <item>hsdpa:4092,87380,704512,4096,16384,110208</item>
+    <item>hsupa:4092,87380,704512,4096,16384,110208</item>
+    <item>hspa:4092,87380,704512,4096,16384,110208</item>
+    <item>hspap:4092,87380,704512,4096,16384,110208</item>
+    </string-array>
 
-    <!-- Enables or disables fading edges when marquee is enabled in TextView. -->
-    <bool name="config_ui_enableFadingMarquee">true</bool>
+     <!-- Values for GPS configuration -->
+    <string-array translatable="false" name="config_gpsParameters">
+    <item>SUPL_HOST=supl.google.com</item>
+    <item>SUPL_PORT=7276</item>
+    <item>NTP_SERVER=europe.pool.ntp.org</item>
+    <item>NTP_SERVER=time.gpsonextra.net</item>
+    <item>SUPL_VER=0x10000</item>
+    <item>SUPL_MODE=1</item>
+    </string-array>
 
-   <!-- Timeout in MS for how long you have to long-press the back key to
-         kill the foreground app. -->
-    <integer name="config_backKillTimeout">1500</integer>
-
-    <!-- Hardware 'face' keys present on the device, stored as a bit field.
-         This integer should equal the sum of the corresponding value for each
-         of the following keys present:
-             1 - Home
-             2 - Back
-             4 - Menu
-             8 - Assistant (search)
-            16 - App switch
-         For example, a device with Home, Back and Menu keys would set this
-         config to 7. -->
-    <integer name="config_deviceHardwareKeys">7</integer>
-
-    <!--  Maximum number of supported users -->
-    <integer name="config_multiuserMaximumUsers">4</integer>
-
-    <!--  Whether Multiuser UI should be shown -->
-    <bool name="config_enableMultiUserUI">true</bool>
 </resources>

@@ -1,0 +1,10 @@
+allow mediaserver { gpu_device nvhost_device }:chr_file rw_file_perms;
+allow mediaserver { nvhost_writable_device gpu_device nvhost_device }:chr_file rw_file_perms;
+allow mediaserver nvcam_data_files:file rw_file_perms;
+
+# Permit mediaserver to create sockets
+allow mediaserver self:socket create;
+allow mediaserver nvcam_data_files:dir search;
+allow mediaserver system_server:unix_stream_socket read;
+allow mediaserver radio_device:chr_file { read write open };
+allow mediaserver sysfs_wake_lock:file rw_file_perms;

@@ -1,0 +1,66 @@
+/dev/tegra-throughput	0666	system	system
+/dev/knvmap	0660	system	system
+/dev/nvmap	0666	system	system
+/dev/tegra_avp	0660	media	media
+/dev/tegra_rpc	0660	media	media
+/dev/tegra_avpchannel	0660	media	media
+/dev/tegra_audio_avpchannel	0660	media	media
+/dev/tegra_sema	0660	media	media
+/dev/tegra_mediaserver	0660 	media 	media
+#/dev/ar0832	0660	media	camera
+/dev/imx111 0660	media	camera
+/dev/imx119 0660	media	camera
+/dev/dw9714	0660	media	camera
+/dev/lm3559	0660	media	camera
+/dev/imx119     0660    media   camera
+#/dev/imx073	0660	media	camera
+#/dev/ov2710	0660	media	camera
+#/dev/sh532u	0660	media	camera
+#/dev/mt9m114	0660	media	camera
+/dev/tegra_camera	0660	media	camera
+/dev/camera*	0660	media	camera
+/dev/focuser*	0660	media	camera
+/dev/torch*	0660	media	camera
+/dev/spdif*	0660	system	audio
+/dev/tegra_dc*	0666	system	system
+/dev/ttyACM*	0660	radio	radio
+/dev/pts*	0660	radio	radio
+/dev/mpu	0640	system	system
+/dev/mpuirq	0640	system	system
+/dev/timerirq	0640	system	system
+/dev/nvhdcp0    0666    system  system
+/dev/nvhdcp1    0666    system  system
+/dev/nvhost-ctrl	0666	root	root
+/dev/nvhost-display	0666	root	root
+/dev/nvhost-dsi	0666	root	root
+/dev/nvhost-gr2d	0666	root	root
+/dev/nvhost-gr3d	0666	root	root
+/dev/nvhost-isp	0666	root	root
+/dev/nvhost-mpe	0666	root	root
+/dev/nvhost-vi	0666	root	root
+/dev/video0	0660	media	camera
+/dev/video1	0660	media	camera
+/dev/tf_driver  0666    system  system
+# Begin Immersion changes
+/dev/tspdrv	0666	root	root
+# End Immersion changes
+/dev/ttyGS0	0660	system	system
+/dev/ttyGS1	0660	system	system
+/dev/ttyGS2	0660	system	system
+# CTS Pass
+/dev/block/mmcblk0p5 0660 system sdcard_rw
+/dev/block/mmcblk0p7 0660 system sdcard_rw
+/dev/ttyHS0	0664	radio	system
+/dev/ttyHS1	0664	root	system
+/dev/ttyHS2	0660	bluetooth	bluetooth
+/dev/ion	0666	system	system
+/dev/timerinfo	0444	system	system
+/dev/pts29	0660	media	media
+/sys/devices/system/cpu/cpufreq/gov_interactive* ../interactive/max_boost 0644 system system
+/sys/devices/system/cpu/cpufreq/gov_interactive* ../interactive/go_maxspeed_load 0644 system system
+
+/dev/rfkill	0660	wifi	wifi
+# GPS
+/dev/ttyHS1	0660	system	system
+# NFC
+/dev/pn544	0660	nfc	nfc

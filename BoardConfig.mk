@@ -15,6 +15,9 @@ TARGET_ARCH_VARIANT_CPU := $(TARGET_CPU_VARIANT)
 ARCH_ARM_HAVE_TLS_REGISTER := true
 ARCH_ARM_HAVE_32_BYTE_CACHE_LINES := true
 ARCH_ARM_USE_NON_NEON_MEMCPY := true
+COMMON_GLOBAL_CFLAGS += -D__ARM_USE_PLD -D__ARM_CACHE_LINE_SIZE=32
+TARGET_GLOBAL_CFLAGS += -mtune=cortex-a9 -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a9 -mfpu=neon -mfloat-abi=softfp
 
 # Avoid the generation of ldrcc instructions
 NEED_WORKAROUND_CORTEX_A9_745320 := true
@@ -32,14 +35,17 @@ TARGET_BOOTLOADER_BOARD_NAME := p880
 # Lollipop Changes
 TARGET_USES_LOGD := false
 MALLOC_IMPL := dlmalloc
-
+USE_LEGACY_AUDIO_POLICY := 1
 COMMON_GLOBAL_CFLAGS += \
-    -DNEEDS_VECTORIMPL_SYMBOLS \
     -DADD_LEGACY_SET_POSITION_SYMBOL \
+    -DADD_LEGACY_SURFACE_COMPOSER_CLIENT_SYMBOLS \
     -DADD_LEGACY_MEMORY_DEALER_CONSTRUCTOR_SYMBOL \
     -DADD_LEGACY_ACQUIRE_BUFFER_SYMBOL \
-    -DMR0_AUDIO_BLOB \ 
-    -DMR0_CAMERA_BLOB
+    -DMR0_AUDIO_BLOB \
+    -DMR0_CAMERA_BLOB \
+    -DNEEDS_VECTORIMPL_SYMBOLS \
+    -DREFBASE_JB_MR1_COMPAT_SYMBOLS \
+    -DSK_SUPPORT_LEGACY_DECODEFILE
 
 #BOARD_USES_LEGACY_MMAP := true
 #BOARD_HAVE_PIXEL_FORMAT_INFO := true
@@ -67,18 +73,18 @@ TARGET_RECOVERY_PRE_COMMAND := "/system/bin/setup-recovery"
 TARGET_KERNEL_CONFIG := cyanogenmod_x3_defconfig
 
 BOARD_HAS_NO_SELECT_BUTTON := true
-TARGET_RECOVERY_FSTAB = device/lge/p880/fstab.x3
+TARGET_RECOVERY_FSTAB = device/lge/p880/rootdir/fstab.x3
 TARGET_USERIMAGES_USE_EXT4 := true
 
 TARGET_SPECIFIC_HEADER_PATH := device/lge/p880/include
 
 # Hardware rendering
 USE_OPENGL_RENDERER := true
-BOARD_EGL_CFG := device/lge/p880/egl.cfg
+BOARD_EGL_CFG := device/lge/p880/configs/egl.cfg
 BOARD_USE_MHEAP_SCREENSHOT := true
 BOARD_EGL_WORKAROUND_BUG_10194508 := true
 TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
-#BOARD_EGL_SKIP_FIRST_DEQUEUE := true
+BOARD_EGL_SKIP_FIRST_DEQUEUE := true
 
 # Wifi related defines
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
@@ -110,9 +116,40 @@ BOARD_RIL_CLASS := ../../../device/lge/p880/ril/
 # Override healthd HAL
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.x3
 
-BOARD_CUSTOM_GRAPHICS := ../../../device/lge/p880/recovery-gfx.c
-BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/lge/p880/recovery-keys.c
+BOARD_CUSTOM_GRAPHICS := ../../../device/lge/p880/recovery/recovery-gfx.c
+BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/lge/p880/recovery/recovery-keys.c
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_BATTERY_DEVICE_NAME := battery
+
+TARGET_BOOTANIMATION_PRELOAD := true
+TARGET_BOOTANIMATION_TEXTURE_CACHE := true
+
+BOARD_SEPOLICY_DIRS += \
+    device/lge/p880/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+    file_contexts \
+    genfs_contexts \
+    property_contexts \
+    service_contexts \
+    bluetooth.te \
+    device.te \
+    domain.te \
+    drmserver.te \
+    init_shell.te \
+    file.te \
+    gpsd.te \
+    keystore.te \
+    lmkd.te \
+    mediaserver.te \
+    platform_app.te \
+    recovery.te \
+    rild.te \
+    sensors_config.te \
+    surfaceflinger.te \
+    system_app.te \
+    system_server.te \
+    ueventd.te \
+    vold.te
 
 BOARD_HARDWARE_CLASS := device/lge/p880/cmhw/

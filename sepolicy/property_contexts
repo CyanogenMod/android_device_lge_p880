@@ -1,0 +1,5 @@
+net.rmmod.svc_done            u:object_r:net_radio_prop:s0
+ctl.rmmod_rawip               u:object_r:net_radio_prop:s0
+ctl.insmod_rawip              u:object_r:net_radio_prop:s0
+net.pdp                       u:object_r:net_radio_prop:s0
+net.interfaces.defaultroute   u:object_r:net_radio_prop:s0

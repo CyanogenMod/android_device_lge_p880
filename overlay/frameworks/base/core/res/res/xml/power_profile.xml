@@ -18,44 +18,40 @@
       <value>3.0</value>
       <value>3.0</value>
   </array>
-      <!-- Different CPU speeds as reported in
-                  /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state -->
-    <array name="cpu.speeds">
-        <value>51000</value>
-        <value>102000</value>
-        <value>204000</value>
-        <value>340000</value>
-        <value>475000</value>
-        <value>640000</value>
-        <value>760000</value>
-        <value>860000</value>
-        <value>1000000</value>
-        <value>1100000</value>
-        <value>1200000</value>
-        <value>1300000</value>
-        <value>1400000</value>
-        <value>1500000</value>
-    </array>
+  <!-- Different CPU speeds as reported in
+       /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state -->
+  <array name="cpu.speeds">
+      <value>102000</value>  <!-- 102 MHz -->
+      <value>204000</value>  <!-- 204 MHz -->
+      <value>340000</value>  <!-- 340 MHz -->
+      <value>475000</value>  <!-- 475 MHz -->
+      <value>760000</value>  <!-- 760 MHz -->
+      <value>880000</value>  <!-- 880 MHz -->
+      <value>1000000</value> <!--   1 GHz -->
+      <value>1100000</value> <!-- 1.1 GHz -->
+      <value>1200000</value> <!-- 1.2 GHz -->
+      <value>1300000</value> <!-- 1.3 GHz -->
+      <value>1400000</value> <!-- 1.4 GHz -->
+      <value>1500000</value> <!-- 1.5 GHz -->
+  </array>
   <!-- Power consumption when CPU is idle -->
   <item name="cpu.idle">3.8</item>
   <item name="cpu.awake">54.6</item>
   <!-- Power consumption at different speeds -->
-    <array name="cpu.active">
-        <value>10.0</value>
-        <value>20.0</value>
-        <value>30.0</value>
-        <value>46.9</value>
-        <value>79.4</value>
-        <value>84.4</value>
-        <value>87.8</value>
-        <value>90.6</value>
-        <value>106.1</value>
-        <value>110.3</value>
-        <value>118.3</value>
-        <value>133.3</value>
-        <value>160.6</value>
-        <value>179.2</value>
-    </array>
+  <array name="cpu.active">
+      <value>90</value>   <!-- 102 MHz -->
+      <value>98</value>   <!-- 204 MHz -->
+      <value>110</value>  <!-- 340 MHz -->
+      <value>118</value>  <!-- 475 MHz -->
+      <value>135</value>  <!-- 760 MHz -->
+      <value>140</value>  <!-- 880 MHz -->
+      <value>148</value>  <!--   1 GHz -->
+      <value>154</value>  <!-- 1.1 GHz -->
+      <value>160</value>  <!-- 1.2 GHz -->
+      <value>166</value>  <!-- 1.3 GHz -->
+      <value>172</value>  <!-- 1.4 GHz -->
+      <value>178</value>  <!-- 1.5 GHz -->
+  </array>
   <!-- This is the battery capacity in mAh -->
   <item name="battery.capacity">2150</item>
 </device>

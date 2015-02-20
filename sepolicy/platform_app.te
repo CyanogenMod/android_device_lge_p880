@@ -1,0 +1,2 @@
+# wifiscanner
+allow platform_app debugfs:file { open getattr read };

@@ -1,0 +1,2 @@
+lgsecclk                     u:object_r:system_server_service:s0
+media.nvidia.audio_alsa      u:object_r:mediaserver_service:s0

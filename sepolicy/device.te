@@ -1,0 +1,4 @@
+type nvhost_writable_device, dev_type, mlstrustedobject;
+type knv_device, dev_type;
+type nvhost_device, dev_type;
+type lgsecclk_device, dev_type, mlstrustedobject;

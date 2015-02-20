@@ -1,0 +1,39 @@
+## For "nvram", mmcblk0p7
+allow rild radio_device:blk_file rw_file_perms;
+allow rild radio_data_file:file { rw_file_perms setattr };
+
+allow appdomain { nvhost_writable_device gpu_device }:chr_file rw_file_perms;
+
+allow zygote { video_device console_device nvhost_writable_device knv_device }:chr_file rw_file_perms;
+
+# Allow querying of asec size on SD card
+allow installd sdcard_external:dir { search };
+allow installd sdcard_external:file { getattr };
+
+# lgdrm
+type lgdrmserver, domain;
+type lgdrmserver_exec, exec_type, file_type;
+init_daemon_domain(lgdrmserver)
+allow lgdrmserver self:process execmem;
+
+# lgsecclkserver
+type lgsecclk, domain;
+type lgsecclk_exec, exec_type, file_type;
+type lgsecclk_socket, file_type;
+init_daemon_domain(lgsecclk)
+allow lgsecclk calibration_data_file:dir read;
+allow lgsecclk self:process execmem;
+allow lgsecclk unlabeled:file { read write getattr open };
+allow lgsecclk lgsecclk_exec:dir search;
+allow lgsecclk lgsecclk_exec:file { read open };
+allow lgsecclk lgsecclk_exec:process getattr;
+
+# nvcpud
+type nvcpud, domain;
+type nvcpud_exec, exec_type, file_type;
+init_daemon_domain(nvcpud)
+allow nvcpud self:process execmem;
+
+# Misc
+allow kernel fuse:dir search;
+allow netd kernel:system module_request;
