@@ -92,6 +92,11 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
+# Audio
+PRODUCT_PACKAGES += \
+    audio.primary.tegra \
+    audio_policy.tegra
+
 # Wifi
 PRODUCT_PACKAGES += \
     libwpa_client \
