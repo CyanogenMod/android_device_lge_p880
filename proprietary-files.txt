@@ -14,8 +14,6 @@ lib/hw/camera.tegra.so
 lib/hw/gps.tegra.so
 lib/hw/lights.x3.so
 lib/hw/sensors.tegra.so
-lib/hw/audio_policy.tegra.so
-lib/hw/audio.primary.tegra.so
 lib/hw/gralloc.tegra.so
 lib/hw/hwcomposer.tegra.so
 lib/hw/nfc.default.so
