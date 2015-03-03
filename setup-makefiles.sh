@@ -32,6 +32,11 @@ for FILE in `cat proprietary-files.txt | grep -v ^# | grep -v ^$`; do
     if [ $COUNT = "0" ]; then
         LINEEND=""
     fi
+    if [[ $FILE == *"audio_policy.tegra.so"* ]]; then
+        FILE="$(dirname $FILE)/audio_policy.vendor.tegra.so"
+    elif [[ $FILE == *"audio.primary.tegra.so"* ]]; then
+        FILE="$(dirname $FILE)/audio.primary_vendor.tegra.so"
+    fi
     echo "    $OUTDIR/proprietary/$FILE:system/$FILE$LINEEND" >> $MAKEFILE
 done
 
