@@ -10,4 +10,4 @@
 /dev/block/platform/sdhci-tegra.3/by-name/USP /staging emmc defaults defaults
 /devices/platform/sdhci-tegra.2/mmc_host/mmc2* auto auto defaults voldmanaged=sdcard1:auto
 /devices/platform/tegra-ehci.1/usb1*           auto auto defaults voldmanaged=usbdisk:auto
-
+/dev/block/zram0                               none swap defaults zramsize=268435456
